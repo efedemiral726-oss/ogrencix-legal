@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ÖğrenciX — Gizlilik Politikası</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --card: #ffffff;
+    --text: #17181c;
+    --muted: #5c6068;
+    --line: #e3e5e9;
+    --accent: #0284c7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121317;
+      --card: #1b1d22;
+      --text: #ecedf0;
+      --muted: #a2a7b0;
+      --line: #2b2e35;
+      --accent: #38bdf8;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding-block: 40px;
+    padding-inline: 20px;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px;
+  }
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  h2 { font-size: 1.1rem; margin: 30px 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 4px; }
+  ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  a { color: var(--accent); }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  code {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 0.88em;
+  }
+  footer { color: var(--muted); font-size: 0.86rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <h1>ÖğrenciX — Gizlilik Politikası</h1>
+    <p class="sub">Uygulama: ÖğrenciX (<code>com.ogrencix.android</code>)</p>
+    <p class="sub">Yürürlük tarihi: 16 Eylül 2026</p>
+
+    <p>
+      Bu politika, ÖğrenciX uygulamasının hangi verileri topladığını, bunları neden kullandığını,
+      kimlerle paylaştığını ve verilerin üzerinde hangi haklara sahip olduğunu açıklar.
+      Veriler 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında işlenir.
+    </p>
+
+    <h2>Topladığımız veriler</h2>
+    <ul>
+      <li><strong>Hesap bilgileri:</strong> e-posta adresin. Şifren bize açık halde ulaşmaz; kimlik doğrulama hizmeti tarafından şifrelenmiş (hash'lenmiş) olarak saklanır.</li>
+      <li><strong>Profil bilgileri:</strong> ad soyad, okul, öğrenci numarası, sınıf, avatar, XP ve rozetler. Bunları sen girersin; zorunlu değildir.</li>
+      <li><strong>Eğitim içeriklerin:</strong> dersler, konular, haftalık ders programı, sınavlar, çalışma planları, ödevler ve alt görevler, notlar ve defterler, bilgi kartları, çalışma (pomodoro) oturumları, not/puan kayıtların ve deneme sınavı sonuçların (ders bazında doğru ve yanlış sayıları).</li>
+      <li><strong>Dosyalar:</strong> yüklediğin PDF belgeleri, üzerlerindeki çizimler ve sayfa notları, çektiğin ya da seçtiğin ders sayfası fotoğrafları.</li>
+      <li><strong>Çökme raporları:</strong> uygulama beklenmedik şekilde kapanırsa hatanın teknik ayrıntıları (hata mesajı ve kodun ilgili satırı), cihaz modeli, Android sürümü, uygulama sürümü ve kuruluma ait rastgele bir tanımlayıcı. Bu raporlar ad, e-posta veya içeriklerini içermez.</li>
+    </ul>
+
+    <h2>Toplamadığımız veriler</h2>
+    <ul>
+      <li>Konum, rehber, arama kayıtları veya SMS</li>
+      <li>Reklam kimliği</li>
+      <li>Kullanım analitiği veya davranış takibi</li>
+    </ul>
+    <p>Uygulamada reklam yoktur ve verilerin hiçbir koşulda satılmaz.</p>
+
+    <h2>Verileri neden kullanıyoruz</h2>
+    <ul>
+      <li>Hesabını oluşturmak ve oturumunu açık tutmak</li>
+      <li>Derslerini, notlarını ve dosyalarını cihazların arasında senkronize etmek ve yedeklemek</li>
+      <li>Sınav ve ödev hatırlatıcılarını göndermek</li>
+      <li>Uygulamadaki hataları bulup düzeltmek</li>
+    </ul>
+
+    <h2>Verilerin kimlerle paylaşılır</h2>
+    <p>Verilerin yalnızca uygulamanın çalışması için gereken hizmet sağlayıcılarla, bu amaçla sınırlı olarak işlenir:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Hizmet sağlayıcı</th><th>Ne için</th><th>Hangi veri</th></tr>
+        <tr><td>Supabase</td><td>Kimlik doğrulama, veritabanı ve dosya depolama</td><td>Hesap, profil, eğitim içerikleri ve dosyalar</td></tr>
+        <tr><td>Google Firebase Crashlytics</td><td>Çökme raporları</td><td>Yalnızca yukarıda sayılan çökme bilgileri</td></tr>
+      </table>
+    </div>
+    <p>Bunların dışında verilerin, yasal bir zorunluluk olmadıkça üçüncü kişilerle paylaşılmaz.</p>
+
+    <h2>Uygulama izinleri</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>İzin</th><th>Neden</th></tr>
+        <tr><td>İnternet ve ağ durumu</td><td>Verilerini buluta yedeklemek ve senkronize etmek</td></tr>
+        <tr><td>Kamera</td><td>Ders sayfalarının fotoğrafını çekmek (isteğe bağlı)</td></tr>
+        <tr><td>Depolama okuma (Android 12 ve öncesi)</td><td>Cihazından PDF veya fotoğraf seçmek</td></tr>
+        <tr><td>Bildirimler ve titreşim</td><td>Sınav/ödev hatırlatıcıları ve odak süresi bildirimleri</td></tr>
+        <tr><td>Açılışta çalışma</td><td>Telefon yeniden başladığında hatırlatıcıları yeniden kurmak</td></tr>
+      </table>
+    </div>
+
+    <h2>Güvenlik</h2>
+    <ul>
+      <li>Sunucuyla tüm iletişim şifreli (HTTPS) bağlantı üzerinden yapılır.</li>
+      <li>Oturum bilgilerin cihazında şifrelenmiş olarak saklanır.</li>
+      <li>Veritabanı kuralları gereği her kullanıcı yalnızca kendi verisine erişebilir.</li>
+    </ul>
+
+    <h2>Saklama süresi</h2>
+    <ul>
+      <li>Verilerin, hesabın açık olduğu sürece saklanır.</li>
+      <li>Hesabını sildiğinde verilerin sunucudan anında silinir; rutin yedeklerde kalan kopyalar en geç 30 gün içinde silinir.</li>
+      <li>Çökme raporları 90 gün sonra otomatik olarak silinir.</li>
+    </ul>
+
+    <h2>Hakların</h2>
+    <p>KVKK kapsamında verilerine erişme, düzeltilmesini veya silinmesini isteme ve işlenmesine itiraz etme hakkına sahipsin.</p>
+    <ul>
+      <li>Profil bilgilerini uygulama içinden istediğin zaman düzenleyebilirsin.</li>
+      <li>Hesabını ve tüm verilerini silmek için: <a href="hesap-silme.html">Hesap ve Veri Silme</a></li>
+      <li>Diğer talepler için: <a href="mailto:efedemiral726@gmail.com">efedemiral726@gmail.com</a></li>
+    </ul>
+
+    <h2>Çocukların gizliliği</h2>
+    <p>
+      ÖğrenciX öğrencilere yönelik bir çalışma uygulamasıdır. Reklam göstermez ve verileri pazarlama amacıyla kullanmaz.
+      18 yaşından küçük kullanıcıların uygulamayı veli veya vasilerinin bilgisiyle kullanmasını öneririz.
+      Bir çocuğun verisinin izinsiz toplandığını düşünüyorsan bize yaz, verileri sileriz.
+    </p>
+
+    <h2>Değişiklikler</h2>
+    <p>Bu politikayı güncellersek yeni sürümü bu sayfada yayınlar ve üstteki yürürlük tarihini değiştiririz.</p>
+
+    <h2>İletişim</h2>
+    <p>Sorular için: <a href="mailto:efedemiral726@gmail.com">efedemiral726@gmail.com</a></p>
+
+    <footer>Son güncelleme: 16 Eylül 2026</footer>
+  </div>
+</main>
+</body>
+</html>
