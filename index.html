@@ -1,4 +1,445 @@
 <!doctype html>
+<html lang="tr">
+<head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=gizlilik-politikasi.html">
-<a href="gizlilik-politikasi.html">Gizlilik Politikası</a>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ÖğrenciX: Odak ve Ders Takibi</title>
+<meta name="description" content="Sınava kalan günü gör, çalıştığın zamanı ölç. Odak kadranı, konu hakimiyeti, deneme netleri, ders, ödev ve sınav takibi tek uygulamada.">
+<meta name="theme-color" content="#062a44">
+<meta property="og:title" content="ÖğrenciX: Odak ve Ders Takibi">
+<meta property="og:description" content="Sınava kalan günü gör, çalıştığın zamanı ölç.">
+<meta property="og:image" content="https://efedemiral726-oss.github.io/ogrencix-legal/img/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="img/ikon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/ana-sayfa.jpg">
+<style>
+  :root{
+    --bg:#041d31; --bg2:#07304c; --blue:#0a6db0; --sky:#3cc0f8; --accent:#7fd3ff;
+    --text:#eaf6ff; --muted:#a9c6dc; --glass:rgba(8,40,66,.55); --line:rgba(127,211,255,.18);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{margin:0;color:var(--text);font-family:"Plus Jakarta Sans",system-ui,sans-serif;line-height:1.5;
+    background:radial-gradient(80% 60% at 85% 0%,#135f96 0%,rgba(19,95,150,0) 60%),
+               radial-gradient(60% 50% at 0% 70%,#0b4a78 0%,rgba(11,74,120,0) 60%),
+               linear-gradient(170deg,var(--bg2) 0%,var(--bg) 60%,#02121f 100%) fixed;
+    overflow-x:hidden}
+  a{color:inherit}
+  #scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity 1s ease}
+  #scene.ready{opacity:1}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
+    padding:14px clamp(16px,4vw,48px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:linear-gradient(180deg,rgba(4,29,49,.7),rgba(4,29,49,.25));border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none;letter-spacing:.01em}
+  .brand img{width:34px;height:34px;border-radius:9px}
+
+  .btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;text-decoration:none;border-radius:14px;
+    padding:14px 22px;font-size:16px;color:#fff;background:linear-gradient(135deg,#1fa6ec,#0a6db0);
+    box-shadow:0 10px 30px rgba(10,109,176,.45),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(10,109,176,.6),inset 0 1px 0 rgba(255,255,255,.35)}
+  .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .btn svg{width:20px;height:20px;flex:none}
+  .btn small{display:block;font-size:11px;font-weight:500;opacity:.85;line-height:1.1}
+  .btn span{line-height:1.15}
+  header .btn{padding:9px 16px;font-size:14px;border-radius:11px}
+
+  main{position:relative;z-index:1}
+  .sec{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px clamp(16px,6vw,96px) 60px}
+  .sec[data-side="right"]{justify-content:flex-end}
+  .copy{max-width:520px;width:100%}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(127,211,255,.06);margin-bottom:18px}
+  h1,h2{margin:0;font-weight:800;letter-spacing:-.03em;line-height:1.04;text-wrap:balance}
+  h1{font-size:clamp(40px,6vw,80px)}
+  h2{font-size:clamp(34px,4.6vw,62px)}
+  h1 em,h2 em{font-style:normal;background:linear-gradient(90deg,#7fd3ff,#3cc0f8 60%,#9fe3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .copy p{font-size:clamp(16px,1.4vw,19px);color:var(--muted);margin:20px 0 0;max-width:470px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0;padding:0;list-style:none}
+  .chips li{font-size:14px;font-weight:600;padding:7px 13px;border-radius:10px;background:rgba(127,211,255,.08);border:1px solid var(--line)}
+  .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:32px}
+  .note{font-size:14px;color:var(--muted)}
+  .fb{display:none}
+
+  footer{position:relative;z-index:1;padding:36px clamp(16px,6vw,96px) 48px;border-top:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;
+    background:rgba(2,18,31,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  footer nav{display:flex;flex-wrap:wrap;gap:10px 22px}
+  footer a{text-decoration:none}
+  footer a:hover{color:var(--text);text-decoration:underline}
+
+  #hero{position:relative}
+  .scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+    display:flex;flex-direction:column;align-items:center;gap:8px}
+  .scroll-hint i{width:1px;height:36px;background:linear-gradient(var(--accent),transparent);transform-origin:top;animation:drip 1.8s ease-in-out infinite}
+  @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+  /* Mobile: phone sits in the top half, copy in a glass card at the bottom */
+  @media (max-width:820px){
+    .sec,.sec[data-side="right"]{align-items:flex-end;justify-content:center;padding:90px 16px 28px}
+    .copy{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:22px 20px;
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    h1{font-size:clamp(32px,8.6vw,44px)}
+    h2{font-size:clamp(28px,7.6vw,40px)}
+    .copy p{margin-top:12px;font-size:15px}
+    .eyebrow{margin-bottom:12px;font-size:11px}
+    .chips{margin-top:16px}
+    .cta-row{margin-top:20px}
+    .scroll-hint{display:none}
+  }
+
+  /* No WebGL: plain screenshots inside each section */
+  .no3d #scene{display:none}
+  .no3d .sec{gap:clamp(24px,5vw,72px);flex-wrap:wrap;justify-content:center;align-items:center}
+  .no3d .sec[data-side="right"]{flex-direction:row-reverse}
+  .no3d .copy{background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0}
+  .no3d .fb{display:block;width:min(280px,70vw);border-radius:34px;border:8px solid #111a24;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+  .no3d .scroll-hint{display:none}
+
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-hint i{animation:none}}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<header>
+  <a class="brand" href="#hero"><img src="img/ikon.png" alt="">ÖğrenciX</a>
+  <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span>İndir</span></a>
+</header>
+
+<main>
+  <section class="sec" id="hero" data-shot="ana-sayfa" data-side="left">
+    <div class="copy">
+      <span class="eyebrow">YKS · LGS · Okul sınavları</span>
+      <h1>Sınava kalan günü gör. <em>Çalıştığın zamanı ölç.</em></h1>
+      <p>ÖğrenciX; odak seanslarını, derslerini, ödevlerini ve deneme netlerini tek yerde toplar. Kalan zamanı ve o zamanı nasıl kullandığını görürsün.</p>
+      <div class="cta-row">
+        <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Ücretsiz</small>Google Play'den indir</span></a>
+        <span class="note">Hesap açmadan da kullanılır.</span>
+      </div>
+    </div>
+    <img class="fb" src="img/ana-sayfa.jpg" alt="ÖğrenciX ana sayfa: sınav geri sayımı ve bugünkü dersler" loading="lazy">
+    <div class="scroll-hint" aria-hidden="true">Kaydır<i></i></div>
+  </section>
+
+  <section class="sec" data-shot="odak" data-side="right">
+    <div class="copy">
+      <span class="eyebrow">Odak</span>
+      <h2>Derin odak, <em>kadranla.</em></h2>
+      <p>25/5, 50/10 ve 90/15 düzenleri. Sayaç halka değil; her çentiği bir dakika olan altmışlık bir kadran. Seans bitince hangi derse ne kadar çalıştığın kaydedilir.</p>
+      <ul class="chips"><li>Günlük hedef</li><li>Kesintisiz seri</li><li>Haftalık grafik</li></ul>
+    </div>
+    <img class="fb" src="img/odak.jpg" alt="Odak ekranı: altmış çentikli kadran ve kalan süre" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="konu" data-side="left">
+    <div class="copy">
+      <span class="eyebrow">Konu hakimiyeti</span>
+      <h2>Zayıf konun <em>kendini gösterir.</em></h2>
+      <p>Her derste konu konu hakimiyet puanı ver. Eşiğin altına düşen konu, sıradaki hamle olarak önüne gelir: “Logaritma'dan başla.”</p>
+    </div>
+    <img class="fb" src="img/konu.jpg" alt="Ders detayı: konu bazında hakimiyet puanları" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="deneme" data-side="right">
+    <div class="copy">
+      <span class="eyebrow">Deneme netleri</span>
+      <h2>Netlerin <em>yükselişini</em> izle.</h2>
+      <p>LGS, TYT ve AYT (Sayısal, Eşit Ağırlık, Sözel) denemelerini doğru ve yanlış olarak gir. Net otomatik hesaplanır, gelişimin grafikte görünür.</p>
+      <ul class="chips"><li>LGS</li><li>TYT</li><li>AYT</li></ul>
+    </div>
+    <img class="fb" src="img/deneme.jpg" alt="TYT deneme netleri grafiği" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="takvim" data-side="left">
+    <div class="copy">
+      <span class="eyebrow">Planlama</span>
+      <h2>Dersler, ödevler, sınavlar. <em>Tek takvimde.</em></h2>
+      <p>Haftalık program ve ay takvimi, ders başlamadan hatırlatma. Teslim tarihine göre gruplanan ödevler; geciken teslim kırmızıda.</p>
+      <ul class="chips"><li>Sınav geri sayımı</li><li>Not ortalaması</li><li>Hatırlatmalar</li></ul>
+    </div>
+    <img class="fb" src="img/takvim.jpg" alt="Ay takvimi: dersler ve teslim tarihleri" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="pdf" data-side="right">
+    <div class="copy">
+      <span class="eyebrow">Çalışma alanı</span>
+      <h2>Defter, PDF ve <em>tarama</em> bir arada.</h2>
+      <p>Notlarında kalın, italik ve fosforlu biçimlendirme. PDF kitapçıkların üzerine kalemle çiz. Defter sayfasını tara, yazıyı metne çevir ve içinde ara.</p>
+      <ul class="chips"><li>Akıllı Defter</li><li>PDF üzerine çizim</li><li>Bilgi kartları</li></ul>
+    </div>
+    <img class="fb" src="img/pdf.jpg" alt="PDF kitapçık üzerine kalemle çizim" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="rozetler" data-side="left">
+    <div class="copy">
+      <span class="eyebrow">Motivasyon</span>
+      <h2>Çalıştıkça <em>seviye atla.</em></h2>
+      <p>Seans arası kısa zihin oyunları, okuduğun kitapların takibi, seri ve saat hedeflerine bağlı rozetler.</p>
+    </div>
+    <img class="fb" src="img/rozetler.jpg" alt="Rozetler ekranı" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="koyu" data-side="right">
+    <div class="copy">
+      <span class="eyebrow">Gizlilik</span>
+      <h2>Verilerin <em>senin.</em></h2>
+      <p>Hesap açmadan kullan; her şey telefonunda kalır. İstersen giriş yap, verilerin yedeklensin ve cihazların arasında eşitlensin. Gece çalışanlar için tam koyu tema, tablet düzeni ve ana ekran widget'ları da var.</p>
+    </div>
+    <img class="fb" src="img/koyu.jpg" alt="Koyu tema ana sayfa" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="ana-sayfa" data-side="left">
+    <div class="copy">
+      <h2>Sınava kalan günler <em>boşa gitmesin.</em></h2>
+      <p>ÖğrenciX ücretsiz. İndir, sınav tarihini gir, ilk odak seansını başlat.</p>
+      <div class="cta-row">
+        <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Android</small>Google Play'den indir</span></a>
+      </div>
+    </div>
+    <img class="fb" src="img/ana-sayfa.jpg" alt="" loading="lazy">
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 ÖğrenciX</span>
+  <nav>
+    <a href="gizlilik-politikasi.html">Gizlilik Politikası</a>
+    <a href="hesap-silme.html">Hesap Silme</a>
+    <a href="mailto:efedemiral726@gmail.com">İletişim</a>
+  </nav>
+</footer>
+
+<script>
+  const PLAY_URL = "https://play.google.com/store/apps/details?id=com.ogrencix.android";
+  document.querySelectorAll(".play").forEach(a => { a.href = PLAY_URL; a.rel = "noopener"; });
+</script>
+
+<script type="module">
+try {
+  const probe = document.createElement("canvas");
+  if (!(probe.getContext("webgl2") || probe.getContext("webgl"))) throw new Error("WebGL yok");
+  const THREE = await import("three");
+  const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+  const { RoundedBoxGeometry } = await import("three/addons/geometries/RoundedBoxGeometry.js");
+  start(THREE, RoomEnvironment, RoundedBoxGeometry);
+} catch (e) {
+  console.warn("3D kapalı:", e);
+  document.documentElement.classList.add("no3d");
+}
+
+function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
+  const canvas = document.getElementById("scene");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const FOV = 35, CAM_Z = 8, TAN = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 60);
+  camera.position.set(0, 0, CAM_Z);
+
+  const key = new THREE.DirectionalLight(0xbfe6ff, 2.2); key.position.set(3, 4, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x3cc0f8, 3); rim.position.set(-4, 1, -3); scene.add(rim);
+
+  // ---------- Textures ----------
+  const loader = new THREE.TextureLoader();
+  const maxAniso = renderer.capabilities.getMaxAnisotropy();
+  const texCache = {};
+  const tex = name => texCache[name] ??= loader.load(`img/${name}.jpg`, t => { t.anisotropy = maxAniso; t.needsUpdate = true; });
+  const srgb = t => (t.colorSpace = THREE.SRGBColorSpace, t);
+
+  // ---------- Phone ----------
+  const roundedRect = (w, h, r) => {
+    const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  };
+  const SW = 0.96, SH = SW * 2400 / 1080, BEZ = 0.035;
+  const BW = SW + BEZ * 2, BH = SH + BEZ * 2;
+
+  const phone = new THREE.Group();
+  const bodyGeo = new THREE.ExtrudeGeometry(roundedRect(BW, BH, 0.14),
+    { depth: 0.05, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.022, bevelSegments: 6, curveSegments: 24 });
+  bodyGeo.center();
+  phone.add(new THREE.Mesh(bodyGeo,
+    new THREE.MeshPhysicalMaterial({ color: 0x1a2533, metalness: 0.85, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.15 })));
+  const FRONT = 0.05 + 0.0015;
+
+  const screenGeo = new THREE.ShapeGeometry(roundedRect(SW, SH, 0.11), 24);
+  { // map UVs onto the screen rectangle
+    const p = screenGeo.attributes.position, uv = screenGeo.attributes.uv;
+    for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / SW + 0.5, p.getY(i) / SH + 0.5);
+  }
+  sectionsShots().forEach(n => srgb(tex(n)));
+  const screenMat = new THREE.MeshBasicMaterial({ map: tex("ana-sayfa"), toneMapped: false });
+  const screen = new THREE.Mesh(screenGeo, screenMat);
+  screen.position.z = FRONT; phone.add(screen);
+
+  const glass = new THREE.Mesh(screenGeo, new THREE.MeshPhysicalMaterial({
+    color: 0x000000, transparent: true, opacity: 0.1, roughness: 0.04, metalness: 1, depthWrite: false }));
+  glass.position.z = FRONT + 0.001; phone.add(glass);
+
+  const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 24), new THREE.MeshBasicMaterial({ color: 0x05080c }));
+  lens.position.set(0, SH / 2 - 0.045, FRONT + 0.002); phone.add(lens);
+
+  const logo = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.34), new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false }));
+  loader.load("img/ikon.png", t => { logo.material.map = srgb(t); logo.material.needsUpdate = true; });
+  logo.position.z = -FRONT; logo.rotation.y = Math.PI; phone.add(logo);
+
+  const btnMat = new THREE.MeshStandardMaterial({ color: 0x223040, metalness: 0.9, roughness: 0.3 });
+  [[0.42, 0.28], [0.12, 0.16]].forEach(([y, h]) => {
+    const b = new THREE.Mesh(new RoundedBoxGeometry(0.03, h, 0.05, 3, 0.012), btnMat);
+    b.position.set(BW / 2 + 0.02, y, 0); phone.add(b);
+  });
+  scene.add(phone);
+
+  // Soft glow behind the phone
+  const glowTex = (() => {
+    const c = document.createElement("canvas"); c.width = c.height = 256;
+    const g = c.getContext("2d"), grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    grd.addColorStop(0, "rgba(60,192,248,.55)"); grd.addColorStop(.45, "rgba(10,109,176,.18)"); grd.addColorStop(1, "rgba(10,109,176,0)");
+    g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+    return new THREE.CanvasTexture(c);
+  })();
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(5, 5),
+    new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  scene.add(glow);
+
+  // Focus dial: 60 ticks, every 5th longer, like the app's timer
+  const dial = new THREE.InstancedMesh(new THREE.BoxGeometry(0.018, 1, 0.018),
+    new THREE.MeshBasicMaterial({ color: 0x7fd3ff, transparent: true, opacity: 0.38 }), 60);
+  {
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(), z = new THREE.Vector3(0, 0, 1);
+    for (let i = 0; i < 60; i++) {
+      const a = i / 60 * Math.PI * 2, r = 1.3;
+      q.setFromAxisAngle(z, a); s.set(1, i % 5 ? 0.12 : 0.26, 1); v.set(-Math.sin(a) * r, Math.cos(a) * r, 0);
+      dial.setMatrixAt(i, m.compose(v, q, s));
+    }
+  }
+  scene.add(dial);
+
+  // ---------- Floating decor: glossy brand "X"es and spheres ----------
+  const glossy = c => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.18, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.08 });
+  const mats = [glossy(0x1f9be0), glossy(0x0a6db0), glossy(0xdff3ff), glossy(0x3cc0f8)];
+  const armGeo = new RoundedBoxGeometry(1, 0.26, 0.26, 4, 0.12);
+  const sphereGeo = new THREE.SphereGeometry(0.5, 32, 32);
+  const makeX = mat => {
+    const g = new THREE.Group(), a = new THREE.Mesh(armGeo, mat), b = new THREE.Mesh(armGeo, mat);
+    a.rotation.z = Math.PI / 4; b.rotation.z = -Math.PI / 4; g.add(a, b); return g;
+  };
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const decor = [];
+  for (let i = 0, n = innerWidth < 820 ? 9 : 16; i < n; i++) {
+    const mat = mats[i % mats.length], ball = i % 3 === 2;
+    const o = ball ? new THREE.Mesh(sphereGeo, mat) : makeX(mat);
+    o.scale.setScalar((ball ? 0.25 : 0.45) + rnd() * 0.5);
+    o.rotation.set(rnd() * 6, rnd() * 6, rnd() * 6);
+    o.userData = { x: (rnd() < .5 ? -1 : 1) * (0.5 + rnd() * 0.5), y: rnd(), z: -1.5 - rnd() * 7, par: 0.6 + rnd() * 0.8,
+      spin: new THREE.Vector3(rnd() - .5, rnd() - .5, rnd() - .5).multiplyScalar(0.6) };
+    scene.add(o); decor.push(o);
+  }
+
+  // ---------- Scroll mapping ----------
+  function sectionsShots() { return [...new Set([...document.querySelectorAll(".sec")].map(s => s.dataset.shot))]; }
+  const sections = [...document.querySelectorAll(".sec")];
+  let centers = [], vw = 1, vh = 1, H = 1, W = 1, mobile = false;
+
+  function layout() {
+    vw = innerWidth; vh = innerHeight; mobile = vw < 820;
+    renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.6 : 2));
+    renderer.setSize(vw, vh, false);
+    camera.aspect = vw / vh; camera.updateProjectionMatrix();
+    H = 2 * CAM_Z * TAN; W = H * camera.aspect;
+    centers = sections.map(s => s.offsetTop + s.offsetHeight / 2);
+  }
+
+  // Phone pose per section: opposite the text on desktop, top half on mobile
+  function pose(i) {
+    const side = sections[i].dataset.side === "left" ? 1 : -1;
+    if (mobile) return { x: 0, y: H * 0.25, s: (H * 0.38) / BH, ry: -0.28 * side, rx: 0.05, rz: 0 };
+    const hero = i === 0;
+    return { x: side * Math.min(W * 0.23, 3.4), y: 0, s: (H * (hero ? 0.74 : 0.66)) / BH,
+      ry: -0.42 * side, rx: 0.08, rz: (hero ? 0.07 : 0.03) * side };
+  }
+
+  function scrollIndex() {
+    const t = scrollY + vh / 2;
+    if (t <= centers[0]) return 0;
+    for (let i = 0; i < centers.length - 1; i++)
+      if (t < centers[i + 1]) return i + (t - centers[i]) / (centers[i + 1] - centers[i]);
+    return centers.length - 1;
+  }
+
+  const lerp = THREE.MathUtils.lerp;
+  const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+  let mx = 0, my = 0, mxs = 0, mys = 0, shown = "ana-sayfa";
+  addEventListener("pointermove", e => { mx = e.clientX / vw * 2 - 1; my = e.clientY / vh * 2 - 1; }, { passive: true });
+  addEventListener("resize", layout);
+  addEventListener("load", layout);
+  document.fonts?.ready.then(layout);
+  layout();
+  let f = scrollIndex();
+
+  const clock = new THREE.Clock();
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
+    const k = 1 - Math.exp(-dt * 6);
+    f += (scrollIndex() - f) * k;
+    mxs += (mx - mxs) * k; mys += (my - mys) * k;
+
+    const i = Math.min(Math.floor(f), sections.length - 1), j = Math.min(i + 1, sections.length - 1);
+    const e = smooth(0.18, 0.82, f - i);
+    const a = pose(i), b = pose(j);
+
+    // Between sections the phone does a full turn; the screen swaps while its back faces us
+    const spin = reduced || i === j ? 0 : e * Math.PI * 2 * (i % 2 ? -1 : 1);
+    const want = sections[e < 0.5 ? i : j].dataset.shot;
+    if (want !== shown) { shown = want; screenMat.map = tex(want); screenMat.needsUpdate = true; }
+
+    const still = reduced ? 0 : 1;
+    phone.position.set(lerp(a.x, b.x, e), lerp(a.y, b.y, e) + Math.sin(time * 0.9) * 0.05 * still, 0);
+    phone.scale.setScalar(lerp(a.s, b.s, e) * (1 - Math.sin(e * Math.PI) * 0.12));
+    phone.rotation.set(
+      lerp(a.rx, b.rx, e) + mys * 0.12 * still,
+      lerp(a.ry, b.ry, e) + spin + mxs * 0.22 * still,
+      lerp(a.rz, b.rz, e) + Math.sin(time * 0.6) * 0.02 * still);
+
+    glow.position.set(phone.position.x, phone.position.y, -1.2);
+    glow.scale.setScalar(phone.scale.x * 1.2);
+    dial.position.set(phone.position.x, phone.position.y, -0.9);
+    dial.scale.setScalar(phone.scale.x);
+    dial.rotation.z = (-time * 0.08 - f * 0.5) * still;
+
+    for (const o of decor) {
+      const d = o.userData, hz = 2 * (CAM_Z - d.z) * TAN, R = hz * 1.5;
+      const y = d.y * R + f * d.par * 1.4 + Math.sin(time * 0.5 + d.x * 5) * 0.15 * still;
+      o.position.set(d.x * hz * camera.aspect * 0.55, ((y % R) + R) % R - R / 2, d.z);
+      o.rotation.x += d.spin.x * dt * still; o.rotation.y += d.spin.y * dt * still; o.rotation.z += d.spin.z * dt * still;
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(() => { canvas.classList.add("ready"); frame(); });
+}
+</script>
+</body>
+</html>
