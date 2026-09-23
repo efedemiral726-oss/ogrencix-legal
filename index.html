@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ÖğrenciX: Odak ve Ders Takibi</title>
-<meta name="description" content="Sınava kalan günü gör, çalıştığın zamanı ölç. Odak kadranı, konu hakimiyeti, deneme netleri, ders, ödev ve sınav takibi tek uygulamada.">
+<meta name="description" content="Sınava kalan günü gör, çalıştığın zamanı ölç. Odak kadranı, konu hakimiyeti, deneme netleri, genel sıralama, ders, ödev ve sınav takibi tek uygulamada.">
 <meta name="theme-color" content="#062a44">
 <meta property="og:title" content="ÖğrenciX: Odak ve Ders Takibi">
 <meta property="og:description" content="Sınava kalan günü gör, çalıştığın zamanı ölç.">
@@ -13,8 +13,8 @@
 <link rel="icon" href="img/ikon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/ana-sayfa.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/p/ana-sayfa.jpg">
 <style>
   :root{
     --bg:#041d31; --bg2:#07304c; --blue:#0a6db0; --sky:#3cc0f8; --accent:#7fd3ff;
@@ -28,14 +28,21 @@
                linear-gradient(170deg,var(--bg2) 0%,var(--bg) 60%,#02121f 100%) fixed;
     overflow-x:hidden}
   a{color:inherit}
-  #scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity 1s ease}
+  #scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
   #scene.ready{opacity:1}
 
+  /* ---------- Chrome ---------- */
   header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
     padding:14px clamp(16px,4vw,48px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     background:linear-gradient(180deg,rgba(4,29,49,.7),rgba(4,29,49,.25));border-bottom:1px solid var(--line)}
   .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none;letter-spacing:.01em}
   .brand img{width:34px;height:34px;border-radius:9px}
+  #progress{position:fixed;top:0;left:0;height:2px;width:100%;z-index:11;transform-origin:left;transform:scaleX(0);
+    background:linear-gradient(90deg,#3cc0f8,#7fd3ff)}
+  .dots{position:fixed;right:clamp(12px,2vw,28px);top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;gap:12px}
+  .dots a{display:block;width:8px;height:8px;border-radius:50%;background:rgba(127,211,255,.25);transition:all .3s}
+  .dots a.on{background:var(--accent);height:24px;border-radius:5px}
+  .dots a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
   .btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;text-decoration:none;border-radius:14px;
     padding:14px 22px;font-size:16px;color:#fff;background:linear-gradient(135deg,#1fa6ec,#0a6db0);
@@ -47,22 +54,62 @@
   .btn span{line-height:1.15}
   header .btn{padding:9px 16px;font-size:14px;border-radius:11px}
 
+  /* ---------- Sections ---------- */
   main{position:relative;z-index:1}
-  .sec{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px clamp(16px,6vw,96px) 60px}
+  .sec{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px clamp(16px,6vw,96px) 60px;position:relative}
   .sec[data-side="right"]{justify-content:flex-end}
+  .sec[data-side="center"]{justify-content:center;align-items:flex-start;text-align:center}
+  .sec[data-side="center"] .copy{max-width:640px}
+  .sec[data-side="center"] .copy p{margin-left:auto;margin-right:auto}
   .copy{max-width:520px;width:100%}
-  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
-    padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(127,211,255,.06);margin-bottom:18px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(127,211,255,.06);margin-bottom:18px;text-decoration:none}
+  .eyebrow b{font-weight:800;color:#041d31;background:var(--accent);border-radius:999px;padding:1px 8px;letter-spacing:.06em}
   h1,h2{margin:0;font-weight:800;letter-spacing:-.03em;line-height:1.04;text-wrap:balance}
   h1{font-size:clamp(40px,6vw,80px)}
   h2{font-size:clamp(34px,4.6vw,62px)}
   h1 em,h2 em{font-style:normal;background:linear-gradient(90deg,#7fd3ff,#3cc0f8 60%,#9fe3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
   .copy p{font-size:clamp(16px,1.4vw,19px);color:var(--muted);margin:20px 0 0;max-width:470px}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0;padding:0;list-style:none}
+  .sec[data-side="center"] .chips{justify-content:center}
   .chips li{font-size:14px;font-weight:600;padding:7px 13px;border-radius:10px;background:rgba(127,211,255,.08);border:1px solid var(--line)}
   .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:32px}
-  .note{font-size:14px;color:var(--muted)}
+  .facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:28px;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+  .facts li{display:flex;align-items:center;gap:7px}
+  .facts li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 10px var(--sky)}
   .fb{display:none}
+  .hint{margin-top:14px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+
+  /* reveal on scroll */
+  .js .copy{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .js .copy.in{opacity:1;transform:none}
+
+  #hero .scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+    display:flex;flex-direction:column;align-items:center;gap:8px}
+  .scroll-hint i{width:1px;height:36px;background:linear-gradient(var(--accent),transparent);transform-origin:top;animation:drip 1.8s ease-in-out infinite}
+  @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+  #galeri{cursor:grab;touch-action:pan-y;user-select:none}
+  #galeri.drag{cursor:grabbing}
+
+  /* ---------- Feature grid ---------- */
+  .more{flex-direction:column;justify-content:center;align-items:stretch}
+  .more .copy{max-width:none;text-align:center;margin-bottom:40px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;margin:0 auto;width:100%;perspective:1200px}
+  .card{position:relative;padding:22px;border-radius:20px;background:linear-gradient(160deg,rgba(20,80,125,.55),rgba(6,32,54,.6));
+    border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,border-color .25s}
+  .card:hover{border-color:rgba(127,211,255,.45)}
+  .card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(127,211,255,.14),transparent 60%)}
+  .card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;
+    background:linear-gradient(135deg,#1fa6ec,#0a6db0);box-shadow:0 8px 20px rgba(10,109,176,.4),inset 0 1px 0 rgba(255,255,255,.35)}
+  .card .ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{margin:0;font-size:17px;font-weight:700}
+  .card p{margin:6px 0 0;font-size:14px;color:var(--muted)}
+  .card.wide{grid-column:span 2;display:flex;gap:18px;align-items:center}
+  .card.wide .wimgs{display:flex;gap:10px;align-items:center;flex:none}
+  .card.wide img{display:block;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);height:auto}
 
   footer{position:relative;z-index:1;padding:36px clamp(16px,6vw,96px) 48px;border-top:1px solid var(--line);
     display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;
@@ -71,15 +118,14 @@
   footer a{text-decoration:none}
   footer a:hover{color:var(--text);text-decoration:underline}
 
-  #hero{position:relative}
-  .scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
-    display:flex;flex-direction:column;align-items:center;gap:8px}
-  .scroll-hint i{width:1px;height:36px;background:linear-gradient(var(--accent),transparent);transform-origin:top;animation:drip 1.8s ease-in-out infinite}
-  @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
-
-  /* Mobile: phone sits in the top half, copy in a glass card at the bottom */
+  @media (max-width:1100px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .card.wide{flex-direction:column;align-items:flex-start}
+  }
+  /* Mobile: 3D object sits in the top half, copy in a glass card at the bottom */
   @media (max-width:820px){
-    .sec,.sec[data-side="right"]{align-items:flex-end;justify-content:center;padding:90px 16px 28px}
+    .sec,.sec[data-side="right"],.sec[data-side="center"]{align-items:flex-end;justify-content:center;padding:90px 16px 28px;text-align:left}
+    .sec[data-side="center"] .chips{justify-content:flex-start}
     .copy{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:22px 20px;
       backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
     h1{font-size:clamp(32px,8.6vw,44px)}
@@ -88,19 +134,35 @@
     .eyebrow{margin-bottom:12px;font-size:11px}
     .chips{margin-top:16px}
     .cta-row{margin-top:20px}
-    .scroll-hint{display:none}
+    .facts{margin-top:16px;font-size:13px}
+    #hero .scroll-hint,.dots{display:none}
+    .more{padding-top:90px;justify-content:flex-start}
+    .more .copy{text-align:left;margin-bottom:16px}
+    .grid{gap:10px}
+    .card{padding:16px}
+    .card.wide .wimgs img{max-width:40vw}
   }
+  @media (max-width:520px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}}
 
   /* No WebGL: plain screenshots inside each section */
   .no3d #scene{display:none}
-  .no3d .sec{gap:clamp(24px,5vw,72px);flex-wrap:wrap;justify-content:center;align-items:center}
+  .no3d .sec:not(.more){gap:clamp(24px,5vw,72px);flex-wrap:wrap;justify-content:center;align-items:center}
   .no3d .sec[data-side="right"]{flex-direction:row-reverse}
+  .no3d .sec[data-side="center"]{flex-direction:column}
   .no3d .copy{background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0}
   .no3d .fb{display:block;width:min(280px,70vw);border-radius:34px;border:8px solid #111a24;box-shadow:0 30px 60px rgba(0,0,0,.45)}
-  .no3d .scroll-hint{display:none}
+  .no3d .fb.tab{width:min(420px,86vw);border-radius:28px}
+  .no3d .fb-grid{display:flex;gap:14px;overflow-x:auto;max-width:100%;padding:8px;width:auto;border:0;box-shadow:none;border-radius:0}
+  .no3d .fb-grid img{width:180px;border-radius:22px;border:6px solid #111a24}
+  .no3d #hero .scroll-hint,.no3d .hint{display:none}
 
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-hint i{animation:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}.scroll-hint i{animation:none}
+    .js .copy{transition:none;opacity:1;transform:none}
+    .card{transition:none}
+  }
 </style>
+<script>document.documentElement.classList.add("js")</script>
 <script type="importmap">
 {"imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
@@ -110,95 +172,157 @@
 </head>
 <body>
 <canvas id="scene" aria-hidden="true"></canvas>
+<div id="progress" aria-hidden="true"></div>
 
 <header>
   <a class="brand" href="#hero"><img src="img/ikon.png" alt="">ÖğrenciX</a>
   <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span>İndir</span></a>
 </header>
+<nav class="dots" aria-label="Bölümler"></nav>
 
 <main>
-  <section class="sec" id="hero" data-shot="ana-sayfa" data-side="left">
+  <section class="sec" id="hero" data-shot="ana-sayfa" data-side="left" data-name="Giriş">
     <div class="copy">
-      <span class="eyebrow">YKS · LGS · Okul sınavları</span>
+      <a class="eyebrow" href="#siralama"><b>Yeni</b> Genel Sıralama ve XP</a>
       <h1>Sınava kalan günü gör. <em>Çalıştığın zamanı ölç.</em></h1>
       <p>ÖğrenciX; odak seanslarını, derslerini, ödevlerini ve deneme netlerini tek yerde toplar. Kalan zamanı ve o zamanı nasıl kullandığını görürsün.</p>
       <div class="cta-row">
         <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Ücretsiz</small>Google Play'den indir</span></a>
-        <span class="note">Hesap açmadan da kullanılır.</span>
       </div>
+      <ul class="facts"><li>YKS · LGS · okul sınavları</li><li>Hesap açmadan kullanılır</li><li>Telefon ve tablet</li></ul>
     </div>
-    <img class="fb" src="img/ana-sayfa.jpg" alt="ÖğrenciX ana sayfa: sınav geri sayımı ve bugünkü dersler" loading="lazy">
+    <img class="fb" src="img/p/ana-sayfa.jpg" alt="ÖğrenciX ana sayfa: YKS'ye kalan gün ve bugünkü odak" loading="lazy">
     <div class="scroll-hint" aria-hidden="true">Kaydır<i></i></div>
   </section>
 
-  <section class="sec" data-shot="odak" data-side="right">
+  <section class="sec" data-shot="odak" data-side="right" data-name="Odak">
     <div class="copy">
       <span class="eyebrow">Odak</span>
       <h2>Derin odak, <em>kadranla.</em></h2>
-      <p>25/5, 50/10 ve 90/15 düzenleri. Sayaç halka değil; her çentiği bir dakika olan altmışlık bir kadran. Seans bitince hangi derse ne kadar çalıştığın kaydedilir.</p>
+      <p>25/5, 50/10, 90/15 ya da kendi süren. Sayaç halka değil; her çentiği bir dakika olan altmışlık bir kadran. Seans bitince hangi derse ne kadar çalıştığın kaydedilir.</p>
       <ul class="chips"><li>Günlük hedef</li><li>Kesintisiz seri</li><li>Haftalık grafik</li></ul>
     </div>
-    <img class="fb" src="img/odak.jpg" alt="Odak ekranı: altmış çentikli kadran ve kalan süre" loading="lazy">
+    <img class="fb" src="img/p/odak.jpg" alt="Odak ekranı: altmış çentikli kadran ve kalan süre" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="konu" data-side="left">
+  <section class="sec" data-shot="konu" data-side="left" data-name="Konu hakimiyeti">
     <div class="copy">
       <span class="eyebrow">Konu hakimiyeti</span>
       <h2>Zayıf konun <em>kendini gösterir.</em></h2>
-      <p>Her derste konu konu hakimiyet puanı ver. Eşiğin altına düşen konu, sıradaki hamle olarak önüne gelir: “Logaritma'dan başla.”</p>
+      <p>Her derste konu konu hakimiyet puanı ver. Eşiğin altına düşen konu, sıradaki hamle olarak önüne gelir: “Diziler'den başla.”</p>
+      <ul class="chips"><li>Konu puanları</li><li>Ders notları</li><li>Sayfa tarama</li></ul>
     </div>
-    <img class="fb" src="img/konu.jpg" alt="Ders detayı: konu bazında hakimiyet puanları" loading="lazy">
+    <img class="fb" src="img/p/konu.jpg" alt="Matematik ders detayı: konu bazında hakimiyet puanları" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="deneme" data-side="right">
+  <section class="sec" data-shot="deneme" data-side="right" data-name="Deneme netleri">
     <div class="copy">
       <span class="eyebrow">Deneme netleri</span>
       <h2>Netlerin <em>yükselişini</em> izle.</h2>
-      <p>LGS, TYT ve AYT (Sayısal, Eşit Ağırlık, Sözel) denemelerini doğru ve yanlış olarak gir. Net otomatik hesaplanır, gelişimin grafikte görünür.</p>
+      <p>LGS, TYT ve AYT (Sayısal, Eşit Ağırlık, Sözel) denemelerini doğru ve yanlış olarak gir. Net otomatik hesaplanır; ders ders dağılım ve gelişimin grafikte görünür.</p>
       <ul class="chips"><li>LGS</li><li>TYT</li><li>AYT</li></ul>
     </div>
-    <img class="fb" src="img/deneme.jpg" alt="TYT deneme netleri grafiği" loading="lazy">
+    <img class="fb" src="img/p/deneme.jpg" alt="TYT deneme netleri ve gelişim grafiği" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="takvim" data-side="left">
+  <section class="sec" data-shot="takvim" data-side="left" data-name="Planlama">
     <div class="copy">
       <span class="eyebrow">Planlama</span>
       <h2>Dersler, ödevler, sınavlar. <em>Tek takvimde.</em></h2>
-      <p>Haftalık program ve ay takvimi, ders başlamadan hatırlatma. Teslim tarihine göre gruplanan ödevler; geciken teslim kırmızıda.</p>
+      <p>Haftalık program ve ay takvimi, ders başlamadan hatırlatma. Teslim tarihine göre gruplanan ödevler, yaklaşan yazılılar için geri sayım.</p>
       <ul class="chips"><li>Sınav geri sayımı</li><li>Not ortalaması</li><li>Hatırlatmalar</li></ul>
     </div>
-    <img class="fb" src="img/takvim.jpg" alt="Ay takvimi: dersler ve teslim tarihleri" loading="lazy">
+    <img class="fb" src="img/p/takvim.jpg" alt="Eylül 2026 takvimi: dersler ve teslimler" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="pdf" data-side="right">
+  <section class="sec" data-shot="pdf" data-side="right" data-name="Çalışma alanı">
     <div class="copy">
       <span class="eyebrow">Çalışma alanı</span>
       <h2>Defter, PDF ve <em>tarama</em> bir arada.</h2>
-      <p>Notlarında kalın, italik ve fosforlu biçimlendirme. PDF kitapçıkların üzerine kalemle çiz. Defter sayfasını tara, yazıyı metne çevir ve içinde ara.</p>
-      <ul class="chips"><li>Akıllı Defter</li><li>PDF üzerine çizim</li><li>Bilgi kartları</li></ul>
+      <p>PDF föylerinin üzerine kalemle çöz, işaretle, fosforla. Defterlerini derse göre düzenle. Sayfayı tara, yazıyı metne çevir ve içinde ara.</p>
+      <ul class="chips"><li>Akıllı Defter</li><li>PDF üzerine çizim</li><li>Önemli sayfalar</li></ul>
     </div>
-    <img class="fb" src="img/pdf.jpg" alt="PDF kitapçık üzerine kalemle çizim" loading="lazy">
+    <img class="fb" src="img/p/pdf.jpg" alt="Trigonometri föyü üzerine kalemle çözüm" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="rozetler" data-side="left">
+  <section class="sec" id="siralama" data-shot="siralama" data-side="left" data-name="Genel Sıralama">
     <div class="copy">
-      <span class="eyebrow">Motivasyon</span>
-      <h2>Çalıştıkça <em>seviye atla.</em></h2>
-      <p>Seans arası kısa zihin oyunları, okuduğun kitapların takibi, seri ve saat hedeflerine bağlı rozetler.</p>
+      <span class="eyebrow"><b>Yeni</b> Genel Sıralama</span>
+      <h2>Arkadaşlarınla <em>yarış.</em></h2>
+      <p>Odak dakikaların, biten ödevlerin ve denemelerin XP kazandırır. Bu hafta, tüm zamanlar ve arkadaşlar sıralamasında yerini gör; arkadaşını koduyla ekle. Biri seni geçerse haberin olur.</p>
+      <ul class="chips"><li>Bu Hafta</li><li>Tüm Zamanlar</li><li>Arkadaşlar</li></ul>
     </div>
-    <img class="fb" src="img/rozetler.jpg" alt="Rozetler ekranı" loading="lazy">
+    <img class="fb" src="img/p/siralama.jpg" alt="Genel sıralama: haftalık XP podyumu" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="koyu" data-side="right">
+  <section class="sec" data-actor="tablet" data-side="right" data-name="Tablet">
     <div class="copy">
-      <span class="eyebrow">Gizlilik</span>
+      <span class="eyebrow">Tablet</span>
+      <h2>Tablette de <em>rahat.</em></h2>
+      <p>Ana sayfa, dersler, takvim, odak, denemeler ve çalışma alanı geniş ekrana göre yerleşir. Aynı hesapla telefonun ve tabletin eşitlenir.</p>
+      <ul class="chips"><li>Geniş düzen</li><li>Cihazlar arası eşitleme</li></ul>
+    </div>
+    <img class="fb tab" src="img/t/01-ana_sayfa.jpg" alt="Tablette ÖğrenciX ana sayfa" loading="lazy">
+  </section>
+
+  <section class="sec" data-shot="koyu" data-side="left" data-name="Gizlilik">
+    <div class="copy">
+      <span class="eyebrow">Gizlilik ve koyu tema</span>
       <h2>Verilerin <em>senin.</em></h2>
-      <p>Hesap açmadan kullan; her şey telefonunda kalır. İstersen giriş yap, verilerin yedeklensin ve cihazların arasında eşitlensin. Gece çalışanlar için tam koyu tema, tablet düzeni ve ana ekran widget'ları da var.</p>
+      <p>Hesap açmadan kullan; her şey telefonunda kalır. İstersen giriş yap, verilerin yedeklensin ve cihazların arasında eşitlensin. Gece çalışanlar için tam koyu tema.</p>
     </div>
-    <img class="fb" src="img/koyu.jpg" alt="Koyu tema ana sayfa" loading="lazy">
+    <img class="fb" src="img/p/koyu.jpg" alt="Koyu tema ana sayfa" loading="lazy">
   </section>
 
-  <section class="sec" data-shot="ana-sayfa" data-side="left">
+  <section class="sec" id="galeri" data-actor="gallery" data-side="center" data-name="Ekranlar">
+    <div class="copy">
+      <span class="eyebrow">Ekranlar</span>
+      <h2>Her ekran, <em>özenle.</em></h2>
+      <p>Dersler, profil, sınavlar, keşfet, bildirimler ve daha fazlası.</p>
+      <div class="hint" aria-hidden="true">← Sürükleyip çevir →</div>
+    </div>
+    <div class="fb fb-grid">
+      <img src="img/g/02-dersler.jpg" alt="Dersler" loading="lazy"><img src="img/g/08-profil.jpg" alt="Profil" loading="lazy">
+      <img src="img/g/11-sinavlar.jpg" alt="Sınavlar" loading="lazy"><img src="img/g/13-kesfet.jpg" alt="Keşfet" loading="lazy">
+      <img src="img/g/14-calisma_alani.jpg" alt="Çalışma alanı" loading="lazy"><img src="img/g/19-bildirim_golgesi.jpg" alt="Bildirimler" loading="lazy">
+    </div>
+  </section>
+
+  <section class="sec more" data-actor="none" data-name="Daha fazlası">
+    <div class="copy">
+      <span class="eyebrow">Ve daha fazlası</span>
+      <h2>Küçük ama <em>her gün işe yarar.</em></h2>
+    </div>
+    <div class="grid">
+      <article class="card wide">
+        <div>
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+          <h3>Ana ekran widget'ları</h3>
+          <p>Sınava kalan gün ve bugünün dersleri, uygulamayı açmadan ana ekranında.</p>
+        </div>
+        <div class="wimgs">
+          <img src="img/widget-gerisayim.png" alt="Geri sayım widget'ı" width="170" height="88" loading="lazy">
+          <img src="img/widget-bugun.png" alt="Bugün widget'ı" width="150" height="110" loading="lazy">
+        </div>
+      </article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="16" rx="2"/><path d="M3 7v12a2 2 0 0 0 2 2h10"/></svg></div>
+        <h3>Bilgi kartları</h3><p>Aralıklı tekrarla ezberin kalıcı olsun.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+        <h3>Hafıza oyunları</h3><p>Seans arası kısa zihin molaları.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M2 5a2 2 0 0 1 2-2h6v18H4a2 2 0 0 1-2-2zM22 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2z"/></svg></div>
+        <h3>Kitap takibi</h3><p>Okuduğun kitaplar ve sayfa ilerlemen.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div>
+        <h3>Dönem raporu</h3><p>Çalışma özetini PDF olarak paylaş.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+        <h3>Akıllı hatırlatmalar</h3><p>Ders, ödev, sınav ve kart tekrarı zamanında.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Analiz</h3><p>Haftalık odak grafiği ve not ortalaması.</p></article>
+      <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 15 8.5l7 .9-5 4.8 1.3 6.9L12 17.8 5.7 21.1 7 14.2 2 9.4l7-.9z"/></svg></div>
+        <h3>Rozetler ve seri</h3><p>Seri, saat ve görev hedefleriyle seviye atla.</p></article>
+    </div>
+  </section>
+
+  <section class="sec" data-shot="onboarding" data-side="left" data-name="İndir">
     <div class="copy">
       <h2>Sınava kalan günler <em>boşa gitmesin.</em></h2>
       <p>ÖğrenciX ücretsiz. İndir, sınav tarihini gir, ilk odak seansını başlat.</p>
@@ -206,7 +330,7 @@
         <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Android</small>Google Play'den indir</span></a>
       </div>
     </div>
-    <img class="fb" src="img/ana-sayfa.jpg" alt="" loading="lazy">
+    <img class="fb" src="img/p/onboarding.jpg" alt="" loading="lazy">
   </section>
 </main>
 
@@ -220,8 +344,40 @@
 </footer>
 
 <script>
+  // Plain page behaviour; works with or without WebGL
   const PLAY_URL = "https://play.google.com/store/apps/details?id=com.ogrencix.android";
   document.querySelectorAll(".play").forEach(a => { a.href = PLAY_URL; a.rel = "noopener"; });
+
+  const secs = [...document.querySelectorAll(".sec")];
+  const dots = document.querySelector(".dots");
+  secs.forEach((s, i) => {
+    s.id ||= "b" + i;
+    const a = document.createElement("a");
+    a.href = "#" + s.id; a.setAttribute("aria-label", s.dataset.name); a.title = s.dataset.name;
+    dots.append(a);
+  });
+  const dotLinks = [...dots.children], bar = document.getElementById("progress");
+  function onScroll() {
+    const mid = scrollY + innerHeight / 2;
+    let k = 0; secs.forEach((s, i) => { if (s.offsetTop <= mid) k = i; });
+    dotLinks.forEach((d, i) => d.classList.toggle("on", i === k));
+    bar.style.transform = `scaleX(${scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)})`;
+  }
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add("in")), { threshold: 0.2 });
+  document.querySelectorAll(".copy").forEach(c => io.observe(c));
+
+  // Tilt + spotlight on feature cards
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+    document.querySelectorAll(".card").forEach(c => {
+      c.addEventListener("pointermove", e => {
+        const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty("--ry", (x - .5) * 10 + "deg"); c.style.setProperty("--rx", (.5 - y) * 10 + "deg");
+        c.style.setProperty("--mx", x * 100 + "%"); c.style.setProperty("--my", y * 100 + "%");
+      });
+      c.addEventListener("pointerleave", () => { c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); });
+    });
 </script>
 
 <script type="module">
@@ -255,14 +411,17 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   const key = new THREE.DirectionalLight(0xbfe6ff, 2.2); key.position.set(3, 4, 5); scene.add(key);
   const rim = new THREE.DirectionalLight(0x3cc0f8, 3); rim.position.set(-4, 1, -3); scene.add(rim);
 
-  // ---------- Textures ----------
+  // ---------- Textures (loaded on demand, cached) ----------
   const loader = new THREE.TextureLoader();
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
   const texCache = {};
-  const tex = name => texCache[name] ??= loader.load(`img/${name}.jpg`, t => { t.anisotropy = maxAniso; t.needsUpdate = true; });
-  const srgb = t => (t.colorSpace = THREE.SRGBColorSpace, t);
+  const tex = path => texCache[path] ??= (() => {
+    const t = loader.load(`img/${path}.jpg`);
+    t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+    return t;
+  })();
 
-  // ---------- Phone ----------
+  // ---------- Shared device parts ----------
   const roundedRect = (w, h, r) => {
     const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
     s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
@@ -271,46 +430,107 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
     s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
     return s;
   };
+  const screenGeometry = (w, h, r) => {
+    const g = new THREE.ShapeGeometry(roundedRect(w, h, r), 24);
+    const p = g.attributes.position, uv = g.attributes.uv;
+    for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / w + 0.5, p.getY(i) / h + 0.5);
+    return g;
+  };
+  const bodyGeometry = (w, h, r, depth) => {
+    const g = new THREE.ExtrudeGeometry(roundedRect(w, h, r),
+      { depth, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.022, bevelSegments: 6, curveSegments: 24 });
+    g.center(); return g;
+  };
+  // ExtrudeGeometry groups: 0 = front/back faces, 1 = sides, so the back is glass and the rim is titanium
+  const backMat = new THREE.MeshPhysicalMaterial({ color: 0x0d1520, metalness: 0.4, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.06 });
+  const frameMat = new THREE.MeshPhysicalMaterial({ color: 0x8fa3b8, metalness: 1, roughness: 0.3, clearcoat: 0.6, clearcoatRoughness: 0.2 });
+  const deviceMats = [backMat, frameMat];
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x000000, transparent: true, opacity: 0.1, roughness: 0.04, metalness: 1, depthWrite: false });
+
+  const logoMat = new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false });
+  loader.load("img/ikon.png", t => { t.colorSpace = THREE.SRGBColorSpace; logoMat.map = t; logoMat.needsUpdate = true; });
+  const logoGeo = new THREE.PlaneGeometry(0.3, 0.3);
+
+  // ---------- Phone ----------
   const SW = 0.96, SH = SW * 2400 / 1080, BEZ = 0.035;
-  const BW = SW + BEZ * 2, BH = SH + BEZ * 2;
+  const BW = SW + BEZ * 2, BH = SH + BEZ * 2, FRONT = 0.05 + 0.0015;
+  const phoneBody = bodyGeometry(BW, BH, 0.14, 0.05);
+  const phoneScreen = screenGeometry(SW, SH, 0.11);
 
   const phone = new THREE.Group();
-  const bodyGeo = new THREE.ExtrudeGeometry(roundedRect(BW, BH, 0.14),
-    { depth: 0.05, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.022, bevelSegments: 6, curveSegments: 24 });
-  bodyGeo.center();
-  phone.add(new THREE.Mesh(bodyGeo,
-    new THREE.MeshPhysicalMaterial({ color: 0x1a2533, metalness: 0.85, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.15 })));
-  const FRONT = 0.05 + 0.0015;
-
-  const screenGeo = new THREE.ShapeGeometry(roundedRect(SW, SH, 0.11), 24);
-  { // map UVs onto the screen rectangle
-    const p = screenGeo.attributes.position, uv = screenGeo.attributes.uv;
-    for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / SW + 0.5, p.getY(i) / SH + 0.5);
-  }
-  sectionsShots().forEach(n => srgb(tex(n)));
-  const screenMat = new THREE.MeshBasicMaterial({ map: tex("ana-sayfa"), toneMapped: false });
-  const screen = new THREE.Mesh(screenGeo, screenMat);
-  screen.position.z = FRONT; phone.add(screen);
-
-  const glass = new THREE.Mesh(screenGeo, new THREE.MeshPhysicalMaterial({
-    color: 0x000000, transparent: true, opacity: 0.1, roughness: 0.04, metalness: 1, depthWrite: false }));
-  glass.position.z = FRONT + 0.001; phone.add(glass);
-
-  const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 24), new THREE.MeshBasicMaterial({ color: 0x05080c }));
-  lens.position.set(0, SH / 2 - 0.045, FRONT + 0.002); phone.add(lens);
-
-  const logo = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.34), new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false }));
-  loader.load("img/ikon.png", t => { logo.material.map = srgb(t); logo.material.needsUpdate = true; });
-  logo.position.z = -FRONT; logo.rotation.y = Math.PI; phone.add(logo);
-
-  const btnMat = new THREE.MeshStandardMaterial({ color: 0x223040, metalness: 0.9, roughness: 0.3 });
+  phone.add(new THREE.Mesh(phoneBody, deviceMats));
+  const screenMat = new THREE.MeshBasicMaterial({ map: tex("p/ana-sayfa"), toneMapped: false });
+  const screen = new THREE.Mesh(phoneScreen, screenMat); screen.position.z = FRONT; phone.add(screen);
+  const glass = new THREE.Mesh(phoneScreen, glassMat); glass.position.z = FRONT + 0.001; phone.add(glass);
+  const punch = new THREE.Mesh(new THREE.CircleGeometry(0.022, 24), new THREE.MeshBasicMaterial({ color: 0x05080c }));
+  punch.position.set(0, SH / 2 - 0.045, FRONT + 0.002); phone.add(punch);
+  const logo = new THREE.Mesh(logoGeo, logoMat);
+  logo.position.set(0, -0.15, -FRONT - 0.001); logo.rotation.y = Math.PI; phone.add(logo);
   [[0.42, 0.28], [0.12, 0.16]].forEach(([y, h]) => {
-    const b = new THREE.Mesh(new RoundedBoxGeometry(0.03, h, 0.05, 3, 0.012), btnMat);
+    const b = new THREE.Mesh(new RoundedBoxGeometry(0.03, h, 0.05, 3, 0.012), frameMat);
     b.position.set(BW / 2 + 0.02, y, 0); phone.add(b);
   });
+  { // camera island with three lenses on the back
+    const island = new THREE.Group();
+    island.add(new THREE.Mesh(new RoundedBoxGeometry(0.36, 0.5, 0.035, 4, 0.016),
+      new THREE.MeshPhysicalMaterial({ color: 0x1a2533, metalness: 0.6, roughness: 0.22, clearcoat: 1 })));
+    const ringGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.03, 40), lensGeo = new THREE.CylinderGeometry(0.056, 0.056, 0.032, 40);
+    const lensMat = new THREE.MeshPhysicalMaterial({ color: 0x03060a, metalness: 0.2, roughness: 0.05, clearcoat: 1, iridescence: 0.6 });
+    [[-0.07, 0.12], [-0.07, -0.08], [0.09, 0.02]].forEach(([x, y]) => {
+      const r = new THREE.Mesh(ringGeo, frameMat), l = new THREE.Mesh(lensGeo, lensMat);
+      r.rotation.x = l.rotation.x = Math.PI / 2; r.position.set(x, y, 0.02); l.position.set(x, y, 0.024);
+      island.add(r, l);
+    });
+    island.rotation.y = Math.PI;
+    island.position.set(BW / 2 - 0.28, BH / 2 - 0.36, -FRONT - 0.012);
+    phone.add(island);
+  }
   scene.add(phone);
 
-  // Soft glow behind the phone
+  // ---------- Tablet (auto-cycling screens with crossfade) ----------
+  const TSW = 1.5, TSH = TSW * 1600 / 1000, TBEZ = 0.07;
+  const TBW = TSW + TBEZ * 2, TBH = TSH + TBEZ * 2, TFRONT = 0.035 + 0.0015;
+  const tabletScreen = screenGeometry(TSW, TSH, 0.08);
+  const tablet = new THREE.Group();
+  tablet.add(new THREE.Mesh(bodyGeometry(TBW, TBH, 0.16, 0.022), deviceMats));
+  const TSHOTS = ["01-ana_sayfa", "02-dersler", "03-takvim", "04-odak", "05-denemeler", "06-calisma_alani"].map(n => "t/" + n);
+  const tScreenA = new THREE.Mesh(tabletScreen, new THREE.MeshBasicMaterial({ toneMapped: false, color: 0x0a2236 }));
+  const tScreenB = new THREE.Mesh(tabletScreen, new THREE.MeshBasicMaterial({ toneMapped: false, transparent: true, opacity: 0 }));
+  tScreenA.position.z = TFRONT; tScreenB.position.z = TFRONT + 0.0005;
+  const tGlass = new THREE.Mesh(tabletScreen, glassMat); tGlass.position.z = TFRONT + 0.001;
+  const tLogo = new THREE.Mesh(logoGeo, logoMat);
+  tLogo.position.z = -TFRONT - 0.001; tLogo.rotation.y = Math.PI;
+  tablet.add(tScreenA, tScreenB, tGlass, tLogo);
+  tablet.visible = false; scene.add(tablet);
+  let tLoaded = false, tIdx = 0, tTimer = 0, tFade = -1;
+
+  // ---------- Gallery: a ring of phones ----------
+  const GSHOTS = ["01-ana_sayfa", "02-dersler", "04-odak", "09-siralama", "08-profil", "11-sinavlar", "13-kesfet",
+    "14-calisma_alani", "06-odak_alt", "17-koyu_dersler", "19-bildirim_golgesi", "onboarding"].map(n => "g/" + n);
+  const gallery = new THREE.Group(), ring = new THREE.Group();
+  const gItems = GSHOTS.map((path, n) => {
+    const it = new THREE.Group(), a = n / GSHOTS.length * Math.PI * 2;
+    it.add(new THREE.Mesh(phoneBody, deviceMats));
+    const scr = new THREE.Mesh(phoneScreen, new THREE.MeshBasicMaterial({ toneMapped: false, color: 0x0a2236 }));
+    scr.position.z = FRONT; it.add(scr);
+    const lg = new THREE.Mesh(logoGeo, logoMat); lg.position.z = -FRONT - 0.001; lg.rotation.y = Math.PI; it.add(lg);
+    it.rotation.y = a;
+    it.userData = { a, scr, path };
+    ring.add(it); return it;
+  });
+  gallery.add(ring); gallery.visible = false; scene.add(gallery);
+  let gLoaded = false, gRot = 0, gVel = 0, dragX = null;
+  const galSec = document.getElementById("galeri");
+  galSec.addEventListener("pointerdown", e => { if (e.isPrimary) { dragX = e.clientX; galSec.classList.add("drag"); } });
+  addEventListener("pointermove", e => {
+    if (dragX === null) return;
+    const dx = e.clientX - dragX; dragX = e.clientX;
+    gRot += dx * 0.006; gVel = dx * 0.35;
+  }, { passive: true });
+  const endDrag = () => { dragX = null; galSec.classList.remove("drag"); };
+  addEventListener("pointerup", endDrag); addEventListener("pointercancel", endDrag);
+
+  // ---------- Glow + focus dial ----------
   const glowTex = (() => {
     const c = document.createElement("canvas"); c.width = c.height = 256;
     const g = c.getContext("2d"), grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
@@ -322,9 +542,10 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
     new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
   scene.add(glow);
 
-  // Focus dial: 60 ticks, every 5th longer, like the app's timer
+  // 60 ticks, every 5th longer: the app's focus dial
+  const DIAL_OPACITY = 0.38;
   const dial = new THREE.InstancedMesh(new THREE.BoxGeometry(0.018, 1, 0.018),
-    new THREE.MeshBasicMaterial({ color: 0x7fd3ff, transparent: true, opacity: 0.38 }), 60);
+    new THREE.MeshBasicMaterial({ color: 0x7fd3ff, transparent: true, opacity: DIAL_OPACITY }), 60);
   {
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(), z = new THREE.Vector3(0, 0, 1);
     for (let i = 0; i < 60; i++) {
@@ -357,8 +578,10 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   }
 
   // ---------- Scroll mapping ----------
-  function sectionsShots() { return [...new Set([...document.querySelectorAll(".sec")].map(s => s.dataset.shot))]; }
   const sections = [...document.querySelectorAll(".sec")];
+  const actor = i => sections[i].dataset.actor || "phone";
+  const galleryIndex = sections.findIndex(s => s.dataset.actor === "gallery");
+  const tabletIndex = sections.findIndex(s => s.dataset.actor === "tablet");
   let centers = [], vw = 1, vh = 1, H = 1, W = 1, mobile = false;
 
   function layout() {
@@ -370,12 +593,12 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
     centers = sections.map(s => s.offsetTop + s.offsetHeight / 2);
   }
 
-  // Phone pose per section: opposite the text on desktop, top half on mobile
-  function pose(i) {
-    const side = sections[i].dataset.side === "left" ? 1 : -1;
-    if (mobile) return { x: 0, y: H * 0.25, s: (H * 0.38) / BH, ry: -0.28 * side, rx: 0.05, rz: 0 };
+  // Device pose for a section: opposite the text on desktop, top half on mobile
+  function pose(i, height, width) {
+    const side = { left: 1, right: -1 }[sections[i].dataset.side] || 0;
+    if (mobile) return { x: 0, y: H * 0.18, s: Math.min((H * 0.36) / height, (W * 0.62) / width), ry: -0.28 * side, rx: 0.05, rz: 0 };
     const hero = i === 0;
-    return { x: side * Math.min(W * 0.23, 3.4), y: 0, s: (H * (hero ? 0.74 : 0.66)) / BH,
+    return { x: side * Math.min(W * 0.24, 3.5), y: 0, s: Math.min((H * (hero ? 0.74 : 0.66)) / height, (W * 0.3) / width),
       ry: -0.42 * side, rx: 0.08, rz: (hero ? 0.07 : 0.03) * side };
   }
 
@@ -398,32 +621,80 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   layout();
   let f = scrollIndex();
 
+  // Put a device between its poses at sections a/b (blend e); w is how present it is, 0..1
+  function placeDevice(obj, a, b, e, w, height, width, spin, still, time) {
+    obj.visible = w > 0.002;
+    if (!obj.visible) return;
+    const A = pose(a, height, width), B = pose(b, height, width), out = 1 - w;
+    obj.position.set(lerp(A.x, B.x, e), lerp(A.y, B.y, e) - out * H * 1.1 + Math.sin(time * 0.9) * 0.05 * still, 0);
+    obj.scale.setScalar(lerp(A.s, B.s, e) * (spin ? 1 - Math.sin(e * Math.PI) * 0.12 : 1) * (0.7 + 0.3 * w));
+    obj.rotation.set(
+      lerp(A.rx, B.rx, e) + mys * 0.12 * still + out * 0.6,
+      lerp(A.ry, B.ry, e) + spin + mxs * 0.22 * still + out * 1.2,
+      lerp(A.rz, B.rz, e) + Math.sin(time * 0.6) * 0.02 * still);
+  }
+
   const clock = new THREE.Clock();
   function frame() {
-    const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
+    const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime, still = reduced ? 0 : 1;
     const k = 1 - Math.exp(-dt * 6);
     f += (scrollIndex() - f) * k;
     mxs += (mx - mxs) * k; mys += (my - mys) * k;
 
     const i = Math.min(Math.floor(f), sections.length - 1), j = Math.min(i + 1, sections.length - 1);
-    const e = smooth(0.18, 0.82, f - i);
-    const a = pose(i), b = pose(j);
+    const e = i === j ? 0 : smooth(0.18, 0.82, f - i);
+    const weight = name => (actor(i) === name ? 1 - e : 0) + (actor(j) === name ? e : 0);
+    const wPhone = weight("phone"), wTablet = weight("tablet"), wGallery = weight("gallery");
 
-    // Between sections the phone does a full turn; the screen swaps while its back faces us
-    const spin = reduced || i === j ? 0 : e * Math.PI * 2 * (i % 2 ? -1 : 1);
-    const want = sections[e < 0.5 ? i : j].dataset.shot;
-    if (want !== shown) { shown = want; screenMat.map = tex(want); screenMat.needsUpdate = true; }
+    // ---- phone: full turn between phone sections; the screen swaps while its back faces us
+    const bothPhone = i !== j && actor(i) === "phone" && actor(j) === "phone";
+    const pa = actor(i) === "phone" ? i : j;
+    const spin = bothPhone && !reduced ? e * Math.PI * 2 * (i % 2 ? -1 : 1) : 0;
+    const want = sections[bothPhone && e >= 0.5 ? j : pa].dataset.shot;
+    if (want && want !== shown) { shown = want; screenMat.map = tex("p/" + want); screenMat.needsUpdate = true; }
+    const next = sections[j].dataset.shot; if (next) tex("p/" + next); // prefetch
+    placeDevice(phone, pa, bothPhone ? j : pa, bothPhone ? e : 0, wPhone, BH, BW, spin, still, time);
 
-    const still = reduced ? 0 : 1;
-    phone.position.set(lerp(a.x, b.x, e), lerp(a.y, b.y, e) + Math.sin(time * 0.9) * 0.05 * still, 0);
-    phone.scale.setScalar(lerp(a.s, b.s, e) * (1 - Math.sin(e * Math.PI) * 0.12));
-    phone.rotation.set(
-      lerp(a.rx, b.rx, e) + mys * 0.12 * still,
-      lerp(a.ry, b.ry, e) + spin + mxs * 0.22 * still,
-      lerp(a.rz, b.rz, e) + Math.sin(time * 0.6) * 0.02 * still);
+    // ---- tablet
+    if (!tLoaded && Math.abs(f - tabletIndex) < 1.6) {
+      tLoaded = true; TSHOTS.forEach(tex);
+      tScreenA.material.map = tex(TSHOTS[0]); tScreenA.material.color.set(0xffffff); tScreenA.material.needsUpdate = true;
+    }
+    placeDevice(tablet, tabletIndex, tabletIndex, 0, wTablet, TBH, TBW, 0, still, time);
+    if (tablet.visible && wTablet > 0.6 && tFade < 0 && (tTimer += dt) > 2.6) {
+      tTimer = 0; tIdx = (tIdx + 1) % TSHOTS.length; tFade = 0;
+      tScreenB.material.map = tex(TSHOTS[tIdx]); tScreenB.material.needsUpdate = true;
+    }
+    if (tFade >= 0) {
+      tFade = Math.min(1, tFade + dt / 0.6);
+      tScreenB.material.opacity = tFade;
+      if (tFade === 1) { tScreenA.material.map = tScreenB.material.map; tScreenA.material.needsUpdate = true; tScreenB.material.opacity = 0; tFade = -1; }
+    }
 
-    glow.position.set(phone.position.x, phone.position.y, -1.2);
-    glow.scale.setScalar(phone.scale.x * 1.2);
+    // ---- gallery ring
+    if (!gLoaded && Math.abs(f - galleryIndex) < 1.6) {
+      gLoaded = true;
+      gItems.forEach(({ userData: d }) => { d.scr.material.map = tex(d.path); d.scr.material.color.set(0xffffff); d.scr.material.needsUpdate = true; });
+    }
+    gallery.visible = wGallery > 0.002;
+    if (gallery.visible) {
+      const R = mobile ? 1.7 : 3.3, s = (H * (mobile ? 0.3 : 0.42)) / BH;
+      gItems.forEach(it => { const a = it.userData.a; it.position.set(Math.sin(a) * R, 0, Math.cos(a) * R); it.scale.setScalar(s); });
+      if (dragX === null) { gRot += (0.18 * still + gVel) * dt; gVel *= Math.exp(-dt * 2.5); }
+      ring.rotation.y = gRot;
+      gallery.position.set(0, (mobile ? H * 0.2 : -H * 0.1) - (1 - wGallery) * H, -R - 0.2);
+      gallery.rotation.x = 0.1 + mys * 0.05 * still;
+      gallery.scale.setScalar(0.75 + 0.25 * wGallery);
+    }
+
+    // ---- glow + dial follow the main device
+    const lead = wTablet > wPhone ? tablet : phone, lw = Math.max(wPhone, wTablet);
+    glow.visible = lw > 0.002;
+    glow.position.set(lead.position.x, lead.position.y, -1.2);
+    glow.scale.setScalar(lead.scale.x * (lead === tablet ? 1.6 : 1.2));
+    glow.material.opacity = lw;
+    dial.visible = wPhone > 0.002;
+    dial.material.opacity = DIAL_OPACITY * wPhone;
     dial.position.set(phone.position.x, phone.position.y, -0.9);
     dial.scale.setScalar(phone.scale.x);
     dial.rotation.z = (-time * 0.08 - f * 0.5) * still;
