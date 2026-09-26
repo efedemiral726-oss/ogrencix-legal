@@ -52,6 +52,8 @@
   .btn svg{width:20px;height:20px;flex:none}
   .btn small{display:block;font-size:11px;font-weight:500;opacity:.85;line-height:1.1}
   .btn span{line-height:1.15}
+  .btn.alt{background:rgba(127,211,255,.1);border:1px solid rgba(127,211,255,.35);box-shadow:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .btn.alt:hover{background:rgba(127,211,255,.18);box-shadow:none}
   header .btn{padding:9px 16px;font-size:14px;border-radius:11px}
 
   /* ---------- Sections ---------- */
@@ -176,7 +178,7 @@
 
 <header>
   <a class="brand" href="#hero"><img src="img/ikon.png" alt="">ÖğrenciX</a>
-  <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span>İndir</span></a>
+  <a class="btn" href="#indir"><span>İndir</span></a>
 </header>
 <nav class="dots" aria-label="Bölümler"></nav>
 
@@ -188,8 +190,9 @@
       <p>ÖğrenciX; odak seanslarını, derslerini, ödevlerini ve deneme netlerini tek yerde toplar. Kalan zamanı ve o zamanı nasıl kullandığını görürsün.</p>
       <div class="cta-row">
         <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Ücretsiz</small>Google Play'den indir</span></a>
+        <a class="btn alt ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>iPhone ve iPad</small>TestFlight ile dene</span></a>
       </div>
-      <ul class="facts"><li>YKS · LGS · okul sınavları</li><li>Hesap açmadan kullanılır</li><li>Telefon ve tablet</li></ul>
+      <ul class="facts"><li>YKS · LGS · okul sınavları</li><li>Hesap açmadan kullanılır</li><li>iPhone, iPad ve Android</li></ul>
     </div>
     <img class="fb" src="img/p/ana-sayfa.jpg" alt="ÖğrenciX ana sayfa: YKS'ye kalan gün ve bugünkü odak" loading="lazy">
     <div class="scroll-hint" aria-hidden="true">Kaydır<i></i></div>
@@ -255,14 +258,14 @@
     <img class="fb" src="img/p/siralama.jpg" alt="Genel sıralama: haftalık XP podyumu" loading="lazy">
   </section>
 
-  <section class="sec" data-actor="tablet" data-side="right" data-name="Tablet">
+  <section class="sec" data-actor="tablet" data-side="right" data-name="iPad">
     <div class="copy">
-      <span class="eyebrow">Tablet</span>
-      <h2>Tablette de <em>rahat.</em></h2>
-      <p>Ana sayfa, dersler, takvim, odak, denemeler ve çalışma alanı geniş ekrana göre yerleşir. Aynı hesapla telefonun ve tabletin eşitlenir.</p>
+      <span class="eyebrow">iPad</span>
+      <h2>iPad'de de <em>rahat.</em></h2>
+      <p>Ana sayfa, dersler, takvim, odak, denemeler ve çalışma alanı geniş ekrana göre yerleşir. Aynı hesapla iPhone'un ve iPad'in eşitlenir.</p>
       <ul class="chips"><li>Geniş düzen</li><li>Cihazlar arası eşitleme</li></ul>
     </div>
-    <img class="fb tab" src="img/t/01-ana_sayfa.jpg" alt="Tablette ÖğrenciX ana sayfa" loading="lazy">
+    <img class="fb tab" src="img/t/01-ana_sayfa.jpg" alt="iPad'de ÖğrenciX ana sayfa" loading="lazy">
   </section>
 
   <section class="sec" data-shot="koyu" data-side="left" data-name="Gizlilik">
@@ -284,7 +287,7 @@
     <div class="fb fb-grid">
       <img src="img/g/02-dersler.jpg" alt="Dersler" loading="lazy"><img src="img/g/08-profil.jpg" alt="Profil" loading="lazy">
       <img src="img/g/11-sinavlar.jpg" alt="Sınavlar" loading="lazy"><img src="img/g/13-kesfet.jpg" alt="Keşfet" loading="lazy">
-      <img src="img/g/14-calisma_alani.jpg" alt="Çalışma alanı" loading="lazy"><img src="img/g/19-bildirim_golgesi.jpg" alt="Bildirimler" loading="lazy">
+      <img src="img/g/14-calisma_alani.jpg" alt="Çalışma alanı" loading="lazy"><img src="img/g/12-denemeler.jpg" alt="Denemeler" loading="lazy">
     </div>
   </section>
 
@@ -322,12 +325,13 @@
     </div>
   </section>
 
-  <section class="sec" data-shot="onboarding" data-side="left" data-name="İndir">
+  <section class="sec" id="indir" data-shot="onboarding" data-side="left" data-name="İndir">
     <div class="copy">
       <h2>Sınava kalan günler <em>boşa gitmesin.</em></h2>
       <p>ÖğrenciX ücretsiz. İndir, sınav tarihini gir, ilk odak seansını başlat.</p>
       <div class="cta-row">
         <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Android</small>Google Play'den indir</span></a>
+        <a class="btn alt ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>iPhone ve iPad</small>TestFlight ile dene</span></a>
       </div>
     </div>
     <img class="fb" src="img/p/onboarding.jpg" alt="" loading="lazy">
@@ -346,7 +350,10 @@
 <script>
   // Plain page behaviour; works with or without WebGL
   const PLAY_URL = "https://play.google.com/store/apps/details?id=com.ogrencix.android";
+  // App Store link replaces this once 1.4.0 is approved
+  const IOS_URL = "https://testflight.apple.com/join/TMRR2Shu";
   document.querySelectorAll(".play").forEach(a => { a.href = PLAY_URL; a.rel = "noopener"; });
+  document.querySelectorAll(".ios").forEach(a => { a.href = IOS_URL; a.rel = "noopener"; });
 
   const secs = [...document.querySelectorAll(".sec")];
   const dots = document.querySelector(".dots");
@@ -451,44 +458,46 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   loader.load("img/ikon.png", t => { t.colorSpace = THREE.SRGBColorSpace; logoMat.map = t; logoMat.needsUpdate = true; });
   const logoGeo = new THREE.PlaneGeometry(0.3, 0.3);
 
-  // ---------- Phone ----------
-  const SW = 0.96, SH = SW * 2400 / 1080, BEZ = 0.035;
+  // Camera plateau on the back: lenses at [x, y] (as seen from behind), top-left corner like an iPhone/iPad Pro
+  const ringGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.03, 40), lensGeo = new THREE.CylinderGeometry(0.056, 0.056, 0.032, 40);
+  const lensMat = new THREE.MeshPhysicalMaterial({ color: 0x03060a, metalness: 0.2, roughness: 0.05, clearcoat: 1, iridescence: 0.6 });
+  const plateauMat = new THREE.MeshPhysicalMaterial({ color: 0x1a2533, metalness: 0.6, roughness: 0.22, clearcoat: 1 });
+  const cameraPlateau = (size, lenses, bw, bh, front) => {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(new RoundedBoxGeometry(size, size, 0.035, 4, size * 0.24), plateauMat));
+    lenses.forEach(([x, y]) => {
+      const r = new THREE.Mesh(ringGeo, frameMat), l = new THREE.Mesh(lensGeo, lensMat);
+      r.rotation.x = l.rotation.x = Math.PI / 2; r.position.set(x, y, 0.02); l.position.set(x, y, 0.024);
+      g.add(r, l);
+    });
+    g.rotation.y = Math.PI;
+    g.position.set(bw / 2 - size / 2 - 0.05, bh / 2 - size / 2 - 0.05, -front - 0.012);
+    return g;
+  };
+
+  // ---------- iPhone (screen textures already carry the status bar and Dynamic Island) ----------
+  const SW = 0.96, SH = SW * 2868 / 1320, BEZ = 0.04;
   const BW = SW + BEZ * 2, BH = SH + BEZ * 2, FRONT = 0.05 + 0.0015;
-  const phoneBody = bodyGeometry(BW, BH, 0.14, 0.05);
-  const phoneScreen = screenGeometry(SW, SH, 0.11);
+  const phoneBody = bodyGeometry(BW, BH, 0.17, 0.05);
+  const phoneScreen = screenGeometry(SW, SH, 0.13);
 
   const phone = new THREE.Group();
   phone.add(new THREE.Mesh(phoneBody, deviceMats));
   const screenMat = new THREE.MeshBasicMaterial({ map: tex("p/ana-sayfa"), toneMapped: false });
   const screen = new THREE.Mesh(phoneScreen, screenMat); screen.position.z = FRONT; phone.add(screen);
   const glass = new THREE.Mesh(phoneScreen, glassMat); glass.position.z = FRONT + 0.001; phone.add(glass);
-  const punch = new THREE.Mesh(new THREE.CircleGeometry(0.022, 24), new THREE.MeshBasicMaterial({ color: 0x05080c }));
-  punch.position.set(0, SH / 2 - 0.045, FRONT + 0.002); phone.add(punch);
   const logo = new THREE.Mesh(logoGeo, logoMat);
-  logo.position.set(0, -0.15, -FRONT - 0.001); logo.rotation.y = Math.PI; phone.add(logo);
-  [[0.42, 0.28], [0.12, 0.16]].forEach(([y, h]) => {
+  logo.position.set(0, 0, -FRONT - 0.001); logo.rotation.y = Math.PI; phone.add(logo);
+  // left: action button, volume up/down; right: side button, camera control
+  [[-1, 0.62, 0.09], [-1, 0.42, 0.18], [-1, 0.2, 0.18], [1, 0.4, 0.3], [1, -0.18, 0.14]].forEach(([side, y, h]) => {
     const b = new THREE.Mesh(new RoundedBoxGeometry(0.03, h, 0.05, 3, 0.012), frameMat);
-    b.position.set(BW / 2 + 0.02, y, 0); phone.add(b);
+    b.position.set(side * (BW / 2 + 0.02), y, 0); phone.add(b);
   });
-  { // camera island with three lenses on the back
-    const island = new THREE.Group();
-    island.add(new THREE.Mesh(new RoundedBoxGeometry(0.36, 0.5, 0.035, 4, 0.016),
-      new THREE.MeshPhysicalMaterial({ color: 0x1a2533, metalness: 0.6, roughness: 0.22, clearcoat: 1 })));
-    const ringGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.03, 40), lensGeo = new THREE.CylinderGeometry(0.056, 0.056, 0.032, 40);
-    const lensMat = new THREE.MeshPhysicalMaterial({ color: 0x03060a, metalness: 0.2, roughness: 0.05, clearcoat: 1, iridescence: 0.6 });
-    [[-0.07, 0.12], [-0.07, -0.08], [0.09, 0.02]].forEach(([x, y]) => {
-      const r = new THREE.Mesh(ringGeo, frameMat), l = new THREE.Mesh(lensGeo, lensMat);
-      r.rotation.x = l.rotation.x = Math.PI / 2; r.position.set(x, y, 0.02); l.position.set(x, y, 0.024);
-      island.add(r, l);
-    });
-    island.rotation.y = Math.PI;
-    island.position.set(BW / 2 - 0.28, BH / 2 - 0.36, -FRONT - 0.012);
-    phone.add(island);
-  }
+  phone.add(cameraPlateau(0.46, [[-0.1, 0.1], [-0.1, -0.1], [0.1, 0]], BW, BH, FRONT));
   scene.add(phone);
 
-  // ---------- Tablet (auto-cycling screens with crossfade) ----------
-  const TSW = 1.5, TSH = TSW * 1600 / 1000, TBEZ = 0.07;
+  // ---------- iPad (auto-cycling screens with crossfade) ----------
+  const TSW = 1.5, TSH = TSW * 2752 / 2064, TBEZ = 0.07;
   const TBW = TSW + TBEZ * 2, TBH = TSH + TBEZ * 2, TFRONT = 0.035 + 0.0015;
   const tabletScreen = screenGeometry(TSW, TSH, 0.08);
   const tablet = new THREE.Group();
@@ -500,13 +509,13 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   const tGlass = new THREE.Mesh(tabletScreen, glassMat); tGlass.position.z = TFRONT + 0.001;
   const tLogo = new THREE.Mesh(logoGeo, logoMat);
   tLogo.position.z = -TFRONT - 0.001; tLogo.rotation.y = Math.PI;
-  tablet.add(tScreenA, tScreenB, tGlass, tLogo);
+  tablet.add(tScreenA, tScreenB, tGlass, tLogo, cameraPlateau(0.3, [[0, 0.05]], TBW, TBH, TFRONT));
   tablet.visible = false; scene.add(tablet);
   let tLoaded = false, tIdx = 0, tTimer = 0, tFade = -1;
 
   // ---------- Gallery: a ring of phones ----------
   const GSHOTS = ["01-ana_sayfa", "02-dersler", "04-odak", "09-siralama", "08-profil", "11-sinavlar", "13-kesfet",
-    "14-calisma_alani", "06-odak_alt", "17-koyu_dersler", "19-bildirim_golgesi", "onboarding"].map(n => "g/" + n);
+    "14-calisma_alani", "06-odak_alt", "17-koyu_dersler", "12-denemeler", "onboarding"].map(n => "g/" + n);
   const gallery = new THREE.Group(), ring = new THREE.Group();
   const gItems = GSHOTS.map((path, n) => {
     const it = new THREE.Group(), a = n / GSHOTS.length * Math.PI * 2;
