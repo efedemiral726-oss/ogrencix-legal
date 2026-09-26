@@ -52,8 +52,6 @@
   .btn svg{width:20px;height:20px;flex:none}
   .btn small{display:block;font-size:11px;font-weight:500;opacity:.85;line-height:1.1}
   .btn span{line-height:1.15}
-  .btn.alt{background:rgba(127,211,255,.1);border:1px solid rgba(127,211,255,.35);box-shadow:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-  .btn.alt:hover{background:rgba(127,211,255,.18);box-shadow:none}
   header .btn{padding:9px 16px;font-size:14px;border-radius:11px}
 
   /* ---------- Sections ---------- */
@@ -97,7 +95,7 @@
   /* ---------- Feature grid ---------- */
   .more{flex-direction:column;justify-content:center;align-items:stretch}
   .more .copy{max-width:none;text-align:center;margin-bottom:40px}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;margin:0 auto;width:100%;perspective:1200px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1180px;margin:0 auto;width:100%;perspective:1200px}
   .card{position:relative;padding:22px;border-radius:20px;background:linear-gradient(160deg,rgba(20,80,125,.55),rgba(6,32,54,.6));
     border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
     transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,border-color .25s}
@@ -109,9 +107,6 @@
   .card .ic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .card h3{margin:0;font-size:17px;font-weight:700}
   .card p{margin:6px 0 0;font-size:14px;color:var(--muted)}
-  .card.wide{grid-column:span 2;display:flex;gap:18px;align-items:center}
-  .card.wide .wimgs{display:flex;gap:10px;align-items:center;flex:none}
-  .card.wide img{display:block;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);height:auto}
 
   footer{position:relative;z-index:1;padding:36px clamp(16px,6vw,96px) 48px;border-top:1px solid var(--line);
     display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;
@@ -122,7 +117,6 @@
 
   @media (max-width:1100px){
     .grid{grid-template-columns:repeat(2,1fr)}
-    .card.wide{flex-direction:column;align-items:flex-start}
   }
   /* Mobile: 3D object sits in the top half, copy in a glass card at the bottom */
   @media (max-width:820px){
@@ -142,9 +136,8 @@
     .more .copy{text-align:left;margin-bottom:16px}
     .grid{gap:10px}
     .card{padding:16px}
-    .card.wide .wimgs img{max-width:40vw}
   }
-  @media (max-width:520px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}}
+  @media (max-width:520px){.grid{grid-template-columns:1fr}}
 
   /* No WebGL: plain screenshots inside each section */
   .no3d #scene{display:none}
@@ -189,10 +182,9 @@
       <h1>Sınava kalan günü gör. <em>Çalıştığın zamanı ölç.</em></h1>
       <p>ÖğrenciX; odak seanslarını, derslerini, ödevlerini ve deneme netlerini tek yerde toplar. Kalan zamanı ve o zamanı nasıl kullandığını görürsün.</p>
       <div class="cta-row">
-        <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Ücretsiz</small>Google Play'den indir</span></a>
-        <a class="btn alt ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>iPhone ve iPad</small>TestFlight ile dene</span></a>
+        <a class="btn ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>Ücretsiz · iPhone ve iPad</small>TestFlight ile indir</span></a>
       </div>
-      <ul class="facts"><li>YKS · LGS · okul sınavları</li><li>Hesap açmadan kullanılır</li><li>iPhone, iPad ve Android</li></ul>
+      <ul class="facts"><li>YKS · LGS · okul sınavları</li><li>Hesap açmadan kullanılır</li><li>iPhone ve iPad</li></ul>
     </div>
     <img class="fb" src="img/p/ana-sayfa.jpg" alt="ÖğrenciX ana sayfa: YKS'ye kalan gün ve bugünkü odak" loading="lazy">
     <div class="scroll-hint" aria-hidden="true">Kaydır<i></i></div>
@@ -297,17 +289,6 @@
       <h2>Küçük ama <em>her gün işe yarar.</em></h2>
     </div>
     <div class="grid">
-      <article class="card wide">
-        <div>
-          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
-          <h3>Ana ekran widget'ları</h3>
-          <p>Sınava kalan gün ve bugünün dersleri, uygulamayı açmadan ana ekranında.</p>
-        </div>
-        <div class="wimgs">
-          <img src="img/widget-gerisayim.png" alt="Geri sayım widget'ı" width="170" height="88" loading="lazy">
-          <img src="img/widget-bugun.png" alt="Bugün widget'ı" width="150" height="110" loading="lazy">
-        </div>
-      </article>
       <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="16" rx="2"/><path d="M3 7v12a2 2 0 0 0 2 2h10"/></svg></div>
         <h3>Bilgi kartları</h3><p>Aralıklı tekrarla ezberin kalıcı olsun.</p></article>
       <article class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
@@ -330,8 +311,7 @@
       <h2>Sınava kalan günler <em>boşa gitmesin.</em></h2>
       <p>ÖğrenciX ücretsiz. İndir, sınav tarihini gir, ilk odak seansını başlat.</p>
       <div class="cta-row">
-        <a class="btn play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14.2-8.5a1 1 0 0 0 0-1.72L6.5 2.64A1 1 0 0 0 5 3.5z"/></svg><span><small>Android</small>Google Play'den indir</span></a>
-        <a class="btn alt ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>iPhone ve iPad</small>TestFlight ile dene</span></a>
+        <a class="btn ios" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="10" y="4.5" width="4" height="1.6" rx=".8" fill="currentColor"/></svg><span><small>Ücretsiz · iPhone ve iPad</small>TestFlight ile indir</span></a>
       </div>
     </div>
     <img class="fb" src="img/p/onboarding.jpg" alt="" loading="lazy">
@@ -349,10 +329,8 @@
 
 <script>
   // Plain page behaviour; works with or without WebGL
-  const PLAY_URL = "https://play.google.com/store/apps/details?id=com.ogrencix.android";
   // App Store link replaces this once 1.4.0 is approved
   const IOS_URL = "https://testflight.apple.com/join/TMRR2Shu";
-  document.querySelectorAll(".play").forEach(a => { a.href = PLAY_URL; a.rel = "noopener"; });
   document.querySelectorAll(".ios").forEach(a => { a.href = IOS_URL; a.rel = "noopener"; });
 
   const secs = [...document.querySelectorAll(".sec")];
