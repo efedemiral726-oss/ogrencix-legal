@@ -226,13 +226,12 @@
   .no3d .fb-grid img{width:180px;border-radius:22px;border:6px solid #111a24}
   .no3d #hero .scroll-hint,.no3d .hint{display:none}
 
+  /* Windows turns this on whenever "Animation effects" is off, so nothing is switched off here:
+     reveals keep their fade but don't travel, the ticker slows down */
   @media (prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}.scroll-hint i{animation:none}
-    .js .copy,.js .copy>*,.js .grid .card,.js .copy .w{transition:none;opacity:1;transform:none;translate:none}
-    .marquee div,.aud img,#kimin::before{animation:none}
-    .card{transition:none}
-    #intro{display:none}
-    .brand:hover img{animation:none}
+    html{scroll-behavior:auto}
+    .js .copy,.js .copy>*,.js .grid .card,.js .copy .w{transform:none;translate:none}
+    .marquee div{animation-duration:110s}
   }
 </style>
 <script>document.documentElement.classList.add("js")</script>
@@ -509,7 +508,7 @@
   });
 
   // Buttons lean toward the pointer
-  if (!reduceMotion && matchMedia("(pointer: fine)").matches)
+  if (matchMedia("(pointer: fine)").matches)
     document.querySelectorAll(".btn").forEach(b => {
       b.addEventListener("pointermove", e => {
         const r = b.getBoundingClientRect();
@@ -519,8 +518,8 @@
     });
 
   // Inertial wheel scrolling; touch keeps the native scroll
-  if (window.Lenis && !reduceMotion) {
-    const lenis = new Lenis({ lerp: 0.11, anchors: true });
+  if (window.Lenis) {
+    const lenis = new Lenis({ lerp: reduceMotion ? 0.16 : 0.11, anchors: true });
     const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
   }
@@ -536,7 +535,7 @@
   intro?.addEventListener("animationend", e => { if (e.animationName === "intro-out") intro.remove(); });
 
   // Tilt + spotlight on feature cards
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+  if (matchMedia("(pointer: fine)").matches)
     document.querySelectorAll(".card").forEach(c => {
       c.addEventListener("pointermove", e => {
         const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
@@ -895,7 +894,7 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   const clock = new THREE.Clock();
   const smoothScroll = document.documentElement.classList.contains("lenis");
   function frame() {
-    const raw = clock.getDelta(), dt = Math.min(raw, 0.05), time = clock.elapsedTime, still = reduced ? 0 : 1;
+    const raw = clock.getDelta(), dt = Math.min(raw, 0.05), time = clock.elapsedTime, still = reduced ? 0.4 : 1; // calmer, never frozen
     // Step the resolution down while frames keep running long (ignores tab switches)
     if (time > 3 && raw < 0.1 && dpr > 1) {
       perfT += raw;
@@ -917,12 +916,13 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
     // ---- phone: full turn between phone sections; the screen swaps while its back faces us
     const bothPhone = i !== j && actor(i) === "phone" && actor(j) === "phone";
     const pa = actor(i) === "phone" ? i : j;
-    const spin = bothPhone && !reduced ? e * Math.PI * 2 * (i % 2 ? -1 : 1) : 0;
+    // tied to the scroll position, so it plays for everyone
+    const spin = bothPhone ? e * Math.PI * 2 * (i % 2 ? -1 : 1) : 0;
     const want = sections[bothPhone && e >= 0.5 ? j : pa].dataset.shot;
     if (want && want !== shown) { shown = want; screenMat.map = tex("p/" + want); }
     const next = sections[j].dataset.shot; if (next) tex("p/" + next); // prefetch
     placeDevice(phone, pa, bothPhone ? j : pa, bothPhone ? e : 0, wPhone, BH, BW, spin, still, time);
-    const enter = reduced ? 1 : smooth(enterAt, enterAt + 1.5, time), late = 1 - enter;
+    const enter = smooth(enterAt, enterAt + 1.5, time), late = 1 - enter;
     if (late > 0) {
       phone.rotation.y += late * Math.PI * 1.5;
       phone.rotation.x += late * 0.5;
