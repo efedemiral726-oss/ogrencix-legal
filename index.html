@@ -143,6 +143,11 @@
   .aud div{padding:0 20px 20px;margin-top:-28px;position:relative}
   .aud .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
 
+  /* ---------- A day with the app: four photo steps on a timeline ---------- */
+  .grid.g4{grid-template-columns:repeat(4,1fr);max-width:1180px;position:relative}
+  .day img{aspect-ratio:3/4}
+  .day time{display:inline-block;font-size:13px;font-weight:800;color:#041d31;background:var(--accent);border-radius:999px;padding:2px 10px;margin-bottom:8px}
+
   footer{position:relative;z-index:1;padding:36px clamp(16px,6vw,96px) 48px;border-top:1px solid var(--line);
     display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px;
     background:rgba(2,18,31,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -153,11 +158,13 @@
   @media (max-width:1100px){
     .grid{grid-template-columns:repeat(2,1fr)}
     .grid.g3{grid-template-columns:repeat(3,1fr)}
+    .grid.g4{grid-template-columns:repeat(2,1fr)}
   }
   @media (max-width:820px){
     .grid.g3{grid-template-columns:1fr}
-    .aud img{aspect-ratio:16/9}
+    .aud img,.day img{aspect-ratio:16/9}
   }
+  @media (max-width:520px){.grid.g4{grid-template-columns:1fr}}
   /* Mobile: 3D object sits in the top half, copy in a glass card at the bottom */
   @media (max-width:820px){
     .sec,.sec[data-side="right"],.sec[data-side="center"]{align-items:flex-end;justify-content:center;padding:90px 16px 28px;text-align:left}
@@ -335,6 +342,27 @@
       <img src="img/g/s07-dersler.jpg" alt="Dersler" loading="lazy"><img src="img/g/s06-profil.jpg" alt="Profil" loading="lazy">
       <img src="img/g/k-analiz.jpg" alt="Analiz" loading="lazy"><img src="img/g/k-haftalik.jpg" alt="Haftalık program" loading="lazy">
       <img src="img/g/k-kartlar.jpg" alt="Bilgi kartları" loading="lazy"><img src="img/g/k-hafiza.jpg" alt="Hafıza oyunları" loading="lazy">
+    </div>
+  </section>
+
+  <section class="sec more" id="gun" data-actor="none" data-name="Bir gün">
+    <div class="copy">
+      <span class="eyebrow">Bir gün</span>
+      <h2>Sabahtan geceye, <em>tek uygulama.</em></h2>
+    </div>
+    <div class="grid g4">
+      <article class="card aud day"><img src="img/h/sabah.jpg" alt="" loading="lazy">
+        <div><time>07:30</time><h3>Güne bak.</h3>
+        <p>Ana sayfada sınava kalan gün, bugünün dersleri ve hedefin.</p></div></article>
+      <article class="card aud day"><img src="img/h/okul-sonrasi.jpg" alt="" loading="lazy">
+        <div><time>16:00</time><h3>Ödevleri sırala.</h3>
+        <p>Teslim tarihine göre gruplanır; biteni işaretle, XP kazan.</p></div></article>
+      <article class="card aud day"><img src="img/h/aksam.jpg" alt="" loading="lazy">
+        <div><time>19:00</time><h3>Odağa gir.</h3>
+        <p>50/10 seansı başlat; dakikalar çalıştığın derse yazılır.</p></div></article>
+      <article class="card aud day"><img src="img/h/gece-kart.jpg" alt="" loading="lazy">
+        <div><time>22:30</time><h3>Kısa tekrar.</h3>
+        <p>Bilgi kartlarıyla aralıklı tekrar; koyu tema gözünü yormaz.</p></div></article>
     </div>
   </section>
 
