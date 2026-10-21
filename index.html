@@ -1013,5 +1013,137 @@ function start(THREE, RoomEnvironment, RoundedBoxGeometry) {
   requestAnimationFrame(() => { canvas.classList.add("ready"); frame(); });
 }
 </script>
+
+<!-- ÖğrenciX maskotu: bottom-left helper. Changes pose and says a line per section; a tap opens quick answers. -->
+<style>
+  #buddy{position:fixed;left:clamp(10px,2vw,28px);bottom:clamp(10px,2vw,24px);z-index:12;display:flex;flex-direction:column;align-items:flex-start;gap:10px;pointer-events:none}
+  #buddy>*{pointer-events:auto}
+  .b-mascot{position:relative;width:118px;height:118px;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .b-mascot:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:24px}
+  .b-mascot::after{content:"";position:absolute;left:22%;right:22%;bottom:2px;height:10px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0));animation:b-shadow 2.4s ease-in-out infinite}
+  .b-body{position:absolute;inset:0;transform-origin:50% 100%;animation:b-breathe 2.4s ease-in-out infinite}
+  .b-body img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));transform-origin:50% 100%}
+  .b-body img.pop{animation:b-pop .55s cubic-bezier(.3,1.6,.5,1)}
+  .b-mascot:hover .b-body img,.b-mascot.hop .b-body img{animation:b-hop .6s cubic-bezier(.3,1.4,.5,1)}
+  @keyframes b-breathe{0%,100%{transform:translateY(0) scale(1.02,.98)}50%{transform:translateY(-6px) scale(.99,1.02)}}
+  @keyframes b-shadow{0%,100%{transform:scaleX(1);opacity:.9}50%{transform:scaleX(.8);opacity:.6}}
+  @keyframes b-pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes b-hop{0%{transform:translateY(0)}35%{transform:translateY(-22px) scale(.96,1.05)}70%{transform:translateY(0) scale(1.06,.94)}100%{transform:none}}
+  .b-bubble{position:relative;max-width:min(300px,calc(100vw - 32px));margin-left:12px;padding:12px 34px 12px 14px;border-radius:18px 18px 18px 6px;
+    background:rgba(234,246,255,.97);color:#062a44;font-size:14px;font-weight:600;line-height:1.4;box-shadow:0 16px 40px rgba(0,0,0,.35);
+    transform-origin:0 100%;transition:opacity .25s,transform .35s cubic-bezier(.3,1.5,.5,1)}
+  .b-bubble[hidden]{display:block;opacity:0;transform:scale(.8) translateY(8px);pointer-events:none}
+  .b-bubble p{margin:0}
+  .b-x{position:absolute;top:6px;right:6px;width:24px;height:24px;border:0;border-radius:50%;background:transparent;color:#3a5a73;font-size:18px;line-height:1;cursor:pointer}
+  .b-x:hover{background:rgba(6,42,68,.08)}
+  .b-panel{width:min(340px,calc(100vw - 24px));max-height:min(70vh,520px);overflow:auto;padding:16px;border-radius:22px;
+    background:rgba(7,48,76,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(0,0,0,.5);transform-origin:0 100%;transition:opacity .25s,transform .35s cubic-bezier(.3,1.4,.5,1)}
+  .b-panel[hidden]{display:block;opacity:0;transform:scale(.85) translateY(12px);pointer-events:none;visibility:hidden}
+  .b-panel h3{margin:0 0 4px;font-size:17px}
+  .b-panel .b-sub{margin:0 0 12px;color:var(--muted);font-size:13px}
+  .b-qs{display:flex;flex-wrap:wrap;gap:6px}
+  .b-qs button{font:inherit;font-size:13px;font-weight:600;color:var(--text);padding:7px 11px;border-radius:12px;cursor:pointer;
+    background:rgba(127,211,255,.1);border:1px solid var(--line);transition:background .2s,transform .2s}
+  .b-qs button:hover,.b-qs button[aria-pressed="true"]{background:rgba(127,211,255,.24);transform:translateY(-1px)}
+  .b-ans{margin-top:12px;padding:12px;border-radius:14px;background:rgba(127,211,255,.08);font-size:14px;color:var(--text);line-height:1.5}
+  .b-ans:empty{display:none}
+  .b-ans a{color:var(--accent);font-weight:700}
+  @media (max-width:700px){.b-mascot{width:84px;height:84px}.b-bubble{font-size:13px}}
+  @media (prefers-reduced-motion:reduce){.b-body,.b-mascot::after{animation-duration:5s}.b-mascot:hover .b-body img{animation:none}}
+</style>
+<div id="buddy">
+  <div class="b-panel" id="bPanel" role="dialog" aria-label="ÖğrenciX yardım" hidden>
+    <h3>Selam! Ne merak ediyorsun?</h3>
+    <p class="b-sub">Birine dokun, hemen anlatayım.</p>
+    <div class="b-qs" id="bQs"></div>
+    <div class="b-ans" id="bAns" aria-live="polite"></div>
+  </div>
+  <div class="b-bubble" id="bBubble" hidden><p id="bText"></p><button class="b-x" id="bClose" aria-label="Balonu kapat">×</button></div>
+  <button class="b-mascot" id="bBtn" aria-label="ÖğrenciX maskotu: yardım" aria-expanded="false" aria-controls="bPanel">
+    <span class="b-body"><img id="bImg" src="img/m/wave.png" alt="" width="118" height="118"></span>
+  </button>
+</div>
+<script>
+(() => {
+  const img = document.getElementById("bImg"), btn = document.getElementById("bBtn");
+  const bubble = document.getElementById("bBubble"), text = document.getElementById("bText");
+  const panel = document.getElementById("bPanel"), qs = document.getElementById("bQs"), ans = document.getElementById("bAns");
+  // Pose and line per section (data-name on each .sec)
+  const LINES = {
+    "Giriş": ["wave", "Selam! Ben ÖğrenciX'in maskotuyum. Bir şey merak edersen bana dokun."],
+    "ÖğrenciX Asistan": ["think", "Asistan benim! Takıldığın sorunun fotoğrafını at, adım adım çözelim."],
+    "Yanlış defteri": ["read", "Yanlış yaptığın soruyu 1, 3, 7, 15 ve 30 gün sonra yine getiririm. Kaçış yok."],
+    "Odak": ["focus", "Sayaç başlasın, telefon ters dönsün. Ben yanında beklerim."],
+    "Konu hakimiyeti": ["point", "En zayıf konunu ben gösteririm, oradan başla."],
+    "Deneme netleri": ["point", "Her denemeden sonra netlerin grafiğe eklenir. Gidişatı birlikte izleriz."],
+    "Planlama": ["think", "Dersler, ödevler, sınavlar: hepsi takvimde, hiçbiri unutulmaz."],
+    "Çalışma alanı": ["read", "Notların, PDF'lerin ve taradığın sayfalar tek yerde."],
+    "Genel Sıralama": ["happy", "Haftanın lideri sen ol! Her pazartesi tablo sıfırlanır."],
+    "iPad": ["wave", "iPad'de de buradayım, ekran büyüyünce ben de büyürüm."],
+    "Gizlilik": ["sleep", "Hesap açmasan da olur; verilerin telefonunda kalır. Ben de rahat uyurum."],
+    "Ekranlar": ["happy", "İşte uygulamanın her köşesi!"],
+    "İndir": ["happy", "Hadi başlayalım! İndir, sınav tarihini gir, ilk seansı aç."]
+  };
+  const QA = [
+    ["Ücretsiz mi?", "Evet, ÖğrenciX ücretsiz. Hesap açmadan da kullanabilirsin."],
+    ["Hangi sınavlar?", "YKS (TYT ve AYT), KPSS ve LGS. Geri sayım, deneme netleri ve konular seçtiğin sınava göre kurulur."],
+    ["Asistan ne yapar?", "Takıldığın sorunun fotoğrafını gönder, adım adım çözer. \"Bugün ne çalışayım?\" dersen verilerine bakıp cevap verir, istersen haftanı da planlar. <a href=\"#asistan\">Asistan bölümüne git</a>"],
+    ["Verilerim nerede?", "Hesap açmazsan her şey telefonunda kalır. Giriş yaparsan verilerin yedeklenir ve cihazların arasında eşitlenir. <a href=\"gizlilik-politikasi.html\">Gizlilik Politikası</a>"],
+    ["Nereden indiririm?", "iPhone ve iPad için App Store'da. <a href=\"#indir\">İndirme bölümüne git</a>"],
+    ["Hesabımı nasıl silerim?", "Uygulamada Ayarlar'dan ya da buradan: <a href=\"hesap-silme.html\">Hesap silme</a>"],
+    ["Sana nasıl ulaşırım?", "Bize <a href=\"mailto:efedemiral726@gmail.com\">e-postayla</a> yaz, okuyoruz."]
+  ];
+  const cache = {};
+  const setPose = p => {
+    const src = "img/m/" + p + ".png";
+    if (img.getAttribute("src") === src) return;
+    (cache[p] ||= Object.assign(new Image(), { src })).decode?.().catch(() => {}).finally(() => {
+      img.src = src; img.classList.remove("pop"); void img.offsetWidth; img.classList.add("pop");
+    });
+  };
+  let hideT = 0, muted = false;
+  const say = (line, ms = 6000) => {
+    if (muted || !panel.hidden) return;
+    text.textContent = line; bubble.hidden = false;
+    clearTimeout(hideT); hideT = setTimeout(() => bubble.hidden = true, ms);
+  };
+  document.getElementById("bClose").onclick = () => { bubble.hidden = true; muted = true; };
+  // Section changes: whichever section covers the middle of the screen
+  let current = "";
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const name = e.target.dataset.name; if (!name || name === current) return;
+    current = name;
+    const [pose, line] = LINES[name] || ["point", ""];
+    if (panel.hidden) setPose(pose);
+    if (line) say(line);
+  }), { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll(".sec").forEach(s => io.observe(s));
+  // Quick answers
+  QA.forEach(([q, a], i) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = q; b.setAttribute("aria-pressed", "false");
+    b.onclick = () => {
+      qs.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      ans.innerHTML = a; setPose(i % 2 ? "point" : "happy");
+    };
+    qs.append(b);
+  });
+  const toggle = open => {
+    panel.hidden = !open; btn.setAttribute("aria-expanded", String(open));
+    if (open) { bubble.hidden = true; setPose("think"); }
+    else setPose((LINES[current] || ["wave"])[0]);
+  };
+  btn.onclick = () => {
+    btn.classList.remove("hop"); void btn.offsetWidth; btn.classList.add("hop");
+    toggle(panel.hidden);
+  };
+  ans.addEventListener("click", e => { if (e.target.closest("a[href^='#']")) toggle(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !panel.hidden) { toggle(false); btn.focus(); } });
+  document.addEventListener("click", e => { if (!panel.hidden && !e.target.closest("#buddy")) toggle(false); });
+  setTimeout(() => say(LINES["Giriş"][1], 7000), 2500);
+})();
+</script>
 </body>
 </html>
